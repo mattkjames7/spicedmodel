@@ -15,7 +15,7 @@ void xy2mr(float *x, float *y, int n, float *M, float *R) {
 	}
 }
 
-void polygon(float *x, int n, float *p, int np, float *y) {
+void polyn(float *x, int n, float *p, int np, float *y) {
 	/*******************************************************************
 	 * This will sovle a n-order polynomial
 	 * 
