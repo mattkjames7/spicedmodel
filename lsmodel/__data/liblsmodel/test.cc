@@ -3,6 +3,7 @@
 
 int main() {
 	
+	printf("************Testing the average Mav model***************\n");
 	/* this will performa  simple test on average ion mass model */
 	AvMavModel mav(&_binary_mav_bin_start);
 
@@ -20,5 +21,40 @@ int main() {
 		printf("R: %3.1f MLT: %4.1f mav: %5.2f\n",R[i],mlt[i],out[i]);
 	}
 	
+	printf("************Testing the average Prob model**************\n");
+	/* create the prob model instance */
+	AvProbModel prob(&_binary_prob_bin_start);
+	
+	/* calculate the model */
+	prob.Model(14,mlt,R,true,false,true,1,3,out);
+	
+	/* print the result */
+	for (i=0;i<14;i++) {
+		printf("R: %3.1f MLT: %4.1f prob: %5.2f\n",R[i],mlt[i],out[i]);
+	}	
+	
+	printf("************Testing the average PS model**************\n");
+	/* create the prob model instance */
+	AvPSModel ps(&_binary_ps_bin_start);
+	
+	/* calculate the model */
+	ps.Model(14,mlt,R,true,false,true,1,3,true,out);
+	
+	/* print the result */
+	for (i=0;i<14;i++) {
+		printf("R: %3.1f MLT: %4.1f ps: %5.2f\n",R[i],mlt[i],out[i]);
+	}	
+	
+	printf("************Testing the average PT model**************\n");
+	/* create the prob model instance */
+	AvPTModel pt(&_binary_pt_bin_start);
+	
+	/* calculate the model */
+	pt.Model(14,mlt,R,true,false,true,1,3,true,out);
+	
+	/* print the result */
+	for (i=0;i<14;i++) {
+		printf("R: %3.1f MLT: %4.1f pt: %5.2f\n",R[i],mlt[i],out[i]);
+	}	
 	
 }

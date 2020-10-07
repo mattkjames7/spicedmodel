@@ -23,7 +23,11 @@ obj:
 	#source code
 	$(CCo) activationfunctions.cc -o activationfunctions.o
 	$(CCo) avmodel.cc -o avmodel.o
+	$(CCo) avpsmodel.cc -o avpsmodel.o
+	$(CCo) avptmodel.cc -o avptmodel.o
+	$(CCo) avprobmodel.cc -o avprobmodel.o
 	$(CCo) avmavmodel.cc -o avmavmodel.o
+	$(CCo) boxcox.cc -o boxcox.o
 	$(CCo) matrix.cc -o matrix.o
 	$(CCo) matrixarray.cc -o matrixarray.o
 	$(CCo) matrixmath.cc -o matrixmath.o
