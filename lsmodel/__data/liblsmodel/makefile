@@ -27,13 +27,18 @@ obj:
 	$(CCo) avptmodel.cc -o avptmodel.o
 	$(CCo) avprobmodel.cc -o avprobmodel.o
 	$(CCo) avmavmodel.cc -o avmavmodel.o
+	$(CCo) backpropagate.cc -o backpropagate.o
 	$(CCo) boxcox.cc -o boxcox.o
+	$(CCo) cliplog.cc -o cliplog.o
 	$(CCo) matrix.cc -o matrix.o
 	$(CCo) matrixarray.cc -o matrixarray.o
 	$(CCo) matrixmath.cc -o matrixmath.o
 	$(CCo) polynomial.cc -o polynomial.o
+	$(CCo) randomnumber.cc -o randomnumber.o
 	$(CCo) readarray.cc -o readarray.o
+	$(CCo) regularization.cc -o regularization.o
 	$(CCo) reversearray.cc -o reversearray.o
+	$(CCo) softmax.cc -o softmax.o
 
 test:
 	$(CC) *.o test.cc -o test
