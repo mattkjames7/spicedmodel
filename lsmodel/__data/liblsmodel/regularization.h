@@ -39,4 +39,8 @@ float L1Regularization(MatrixArray &w, float L1, int m);
  * 
  * ********************************************************************/
 float L2Regularization(MatrixArray &w, float L2, int m);
+
+
+
+void ApplyRegGradToMatrix(MatrixArray &w, MatrixArray &wGrad,double L1, double L2, int m);
 #endif

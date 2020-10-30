@@ -1,7 +1,7 @@
 #include "costfunction.h"
 
 /*******************************************************************
- * NAME : 		float crossEntropyCost(h,y,w,L1,L2)
+ * NAME : 		double crossEntropyCost(h,y,w,L1,L2)
  * 
  * DESCRIPTION : 	This function will calculate the cross-entropy cost 
  * 					function.
@@ -14,28 +14,31 @@
  * 							for h, shape (m,K).
  *		MatrixArray	&w	 	MatrixArray object containing network 
  * 							weights.
- * 		float 		L1 		L1 regularization parameter.
- * 		float		L2 		L2 regularization parameter.
+ * 		double 		L1 		L1 regularization parameter.
+ * 		double		L2 		L2 regularization parameter.
  * 
  * RETURNS :
- * 		float	J 	cost (set L1=0.0 and L2=0.0 for classification cost). 
+ * 		double	J 	cost (set L1=0.0 and L2=0.0 for classification cost). 
  * 
  ******************************************************************/
-float crossEntropyCost(Matrix &h, Matrix &y, MatrixArray &w, float L1, float L2) {
+double crossEntropyCost(Matrix &h, Matrix &y, MatrixArray &w, double L1, double L2) {
 
 	
-	float J = 0.0;
+	double J = 0.0;
 	int m, K;
-	m = y->shape[0];
-	K = y->shape[1];
+	m = y.shape[0];
+	K = y.shape[1];
+	int i, j;
+	double lh;
 	
 	/* calculate classification cost first*/
 	for (i=0;i<K;i++) {
 		for (j=0;j<m;j++) {
-			J += -y->data[j,i]*cliplog(h->data[j,i],1e-40) - (1.0-y->data[j,i])*cliplog((1.0-h->data[j,i]),1e-40);
+			lh = cliplog(h.data[j][i],1.0e-40);
+			J += -y.data[j][i]*lh - (1.0-y.data[j][i])*lh;
 		}
 	}
-	J/=((float) m);
+	J/=((double) m);
 	
 	/*Calculate L1 cost*/
 	if (L1 > 0.0) {
@@ -82,7 +85,7 @@ void crossEntropyDelta(Matrix &h, Matrix &y, ActFunc InvAFGrad, Matrix &Deltas) 
 
 
 /*******************************************************************
- * NAME : 		float meanSquaredCost(h,y,w,L1,L2)
+ * NAME : 		double meanSquaredCost(h,y,w,L1,L2)
  * 
  * DESCRIPTION : 	This function will calculate the mean-squared cost 
  * 					function.
@@ -95,27 +98,28 @@ void crossEntropyDelta(Matrix &h, Matrix &y, ActFunc InvAFGrad, Matrix &Deltas) 
  * 							for h, shape (m,K).
  *		MatrixArray	&w	 	MatrixArray object containing network 
  * 							weights.
- * 		float 		L1 		L1 regularization parameter.
- * 		float		L2 		L2 regularization parameter.
+ * 		double 		L1 		L1 regularization parameter.
+ * 		double		L2 		L2 regularization parameter.
  * 
  * RETURNS :
- * 		float	J 	cost (set L1=0.0 and L2=0.0 for classification cost). 
+ * 		double	J 	cost (set L1=0.0 and L2=0.0 for classification cost). 
  * 
  ******************************************************************/
-float meanSquaredCost(Matrix &h, Matrix &y, MatrixArray &w, float L1, float L2) {
+double meanSquaredCost(Matrix &h, Matrix &y, MatrixArray &w, double L1, double L2) {
 	
-	float J = 0.0;
+	double J = 0.0;
 	int m, K;
-	m = y->shape[0];
-	K = y->shape[1];
+	m = y.shape[0];
+	K = y.shape[1];
+	int i, j;
 	
 	/* calculate classification cost first*/
 	for (i=0;i<K;i++) {
 		for (j=0;j<m;j++) {
-			J += powf(h->data[j,i]-y->data[j,i],2.0);
+			J += powf(h.data[j][i]-y.data[j][i],2.0);
 		}
 	}
-	J/=((float) 2*m*K);
+	J/=((double) 2*m*K);
 	
 	/*Calculate L1 cost*/
 	if (L1 > 0.0) {

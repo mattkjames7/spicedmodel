@@ -46,19 +46,19 @@ void BackPropagate(MatrixArray &w, MatrixArray &b,
 	for (i=L-2;i>=0;i--) {
 		if (i == L-2) {
 			/*This would be the final layer, use CF delta*/
-			CFDelta(a->matrix[L-1],y,AFGrad[L-1],Deltas.matrix[i]);
+			CFDelta(*a.matrix[L-1],y,AFGrad[L-1],*Deltas.matrix[i]);
 		} else {
 			/*calculate deltas using previous deltas */
-			_BackPropDeltas(*Deltas.matrix[i+1],*w.matrix[i+1],AF[i+1],*a.matrix[i+1],*Deltas.matrix[i]);
+			_BackPropDeltas(*Deltas.matrix[i+1],*w.matrix[i+1],AFGrad[i+1],*a.matrix[i+1],*Deltas.matrix[i]);
 		}
 		/*calculate weight gradients*/
 		MatrixDot(*a.matrix[i],*Deltas.matrix[i],true,false,*wGrad.matrix[i]);
-		wGrad.matrix[i].DivideScalar((double) m);
+		wGrad.matrix[i]->DivideScalar((double) m);
 		ApplyRegGradToMatrix(w,wGrad,L1,L2,m);
 		
 		/*calculate bias gradients*/
 		MatrixDot(ones,*Deltas.matrix[i],false,false,*bGrad.matrix[i]);
-		bGrad.matrix[i].DivideScalar((double) m);
+		bGrad.matrix[i]->DivideScalar((double) m);
 	}
 		
 	
@@ -90,7 +90,7 @@ void _BackPropDeltas(Matrix &dlin, Matrix &w, ActFunc AFGrad, Matrix &a, Matrix 
 	
 	for (i=0;i<ni;i++) {
 		for (j=0;j<nj;j++) {
-			dlout.data[i][j] = dlout.data[i][j]*AF(a.data[i][j]);
+			dlout.data[i][j] = dlout.data[i][j]*AFGrad(a.data[i][j]);
 		}
 	}
 	

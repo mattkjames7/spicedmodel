@@ -11,7 +11,7 @@ class MatrixArray {
 	public:
 		/* constructor of the array */
 		MatrixArray(int,int*);
-		MatrixArray(unsigned char *memstart);
+		MatrixArray(unsigned char **memstart);
 		
 		/* copy constructor */
 		MatrixArray(const MatrixArray &obj);

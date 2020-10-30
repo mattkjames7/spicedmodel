@@ -2,21 +2,21 @@
 
 
 /***********************************************************************
- * NAME : 	float cliplog(x,min)
+ * NAME : 	double cliplog(x,min)
  * 
  * DESCRIPTION : This function will clip values of x before passing to 
  * 					the log function so that there are not -inf's, a 
  * 					good value for min is 1e-40
  * 
  * INPUTS :
- * 		float	x	The value to be loged
- * 		float 	mn	Minimum value
+ * 		double	x	The value to be loged
+ * 		double 	mn	Minimum value
  * 
  * RETURNS :
- * 		float	log(x)	Log of x
+ * 		double	log(x)	Log of x
  * 	
  * ********************************************************************/
-float cliplog(float x, float mn) {
+double cliplog(double x, double mn) {
 	/* This function will clip values of x before passing to the log
 	 * function so that there are not -inf's,
 	 * a good value for min is 1e-40*/

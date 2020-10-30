@@ -50,9 +50,11 @@ class Matrix {
 		
 		/* fill this matrix with the data from another of the same size*/
 		void FillMatrix(double**);
+		void FillMatrix(float**);
 		
 		/* return the data from this matrix into a 2D array */
 		void ReturnMatrix(double**);
+		void ReturnMatrix(float**);
 		
 		/* this is the data array with its shape and total size*/
 		int shape[2];

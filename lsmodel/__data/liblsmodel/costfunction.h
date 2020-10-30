@@ -5,11 +5,13 @@
 #include "matrixarray.h"
 #include "cliplog.h"
 #include "regularization.h"
+#include "activationfunctions.h"
+#include "matrixmath.h"
 using namespace std;
 
 
 /*******************************************************************
- * NAME : 		float crossEntropyCost(h,y,w,L1,L2)
+ * NAME : 		double crossEntropyCost(h,y,w,L1,L2)
  * 
  * DESCRIPTION : 	This function will calculate the cross-entropy cost 
  * 					function.
@@ -22,14 +24,14 @@ using namespace std;
  * 							for h, shape (m,K).
  *		MatrixArray	&w	 	MatrixArray object containing network 
  * 							weights.
- * 		float 		L1 		L1 regularization parameter.
- * 		float		L2 		L2 regularization parameter.
+ * 		double 		L1 		L1 regularization parameter.
+ * 		double		L2 		L2 regularization parameter.
  * 
  * RETURNS :
- * 		float	J 	cost (set L1=0.0 and L2=0.0 for classification cost). 
+ * 		double	J 	cost (set L1=0.0 and L2=0.0 for classification cost). 
  * 
  ******************************************************************/
-float crossEntropyCost(Matrix &h, Matrix &y, MatrixArray &w, float L1, float L2);
+double crossEntropyCost(Matrix &h, Matrix &y, MatrixArray &w, double L1, double L2);
 
 /*******************************************************************
  * NAME : 		void crossEntropyDelta(h,y,InvAFGrad,Deltas)
@@ -53,7 +55,7 @@ float crossEntropyCost(Matrix &h, Matrix &y, MatrixArray &w, float L1, float L2)
 void crossEntropyDelta(Matrix &h, Matrix &y, ActFunc InvAFGrad, Matrix &Deltas);
 
 /*******************************************************************
- * NAME : 		float meanSquaredCost(h,y,w,L1,L2)
+ * NAME : 		double meanSquaredCost(h,y,w,L1,L2)
  * 
  * DESCRIPTION : 	This function will calculate the mean-squared cost 
  * 					function.
@@ -66,14 +68,14 @@ void crossEntropyDelta(Matrix &h, Matrix &y, ActFunc InvAFGrad, Matrix &Deltas);
  * 							for h, shape (m,K).
  *		MatrixArray	&w	 	MatrixArray object containing network 
  * 							weights.
- * 		float 		L1 		L1 regularization parameter.
- * 		float		L2 		L2 regularization parameter.
+ * 		double 		L1 		L1 regularization parameter.
+ * 		double		L2 		L2 regularization parameter.
  * 
  * RETURNS :
- * 		float	J 	cost (set L1=0.0 and L2=0.0 for classification cost). 
+ * 		double	J 	cost (set L1=0.0 and L2=0.0 for classification cost). 
  * 
  ******************************************************************/
-float meanSquaredCost(Matrix &h, Matrix &y, MatrixArray &w, float L1, float L2);
+double meanSquaredCost(Matrix &h, Matrix &y, MatrixArray &w, double L1, double L2);
 
 /*******************************************************************
  * NAME : 		void meanSquaredDelta(h,y,InvAFGrad,Deltas)
@@ -97,6 +99,6 @@ float meanSquaredCost(Matrix &h, Matrix &y, MatrixArray &w, float L1, float L2);
 void meanSquaredDelta(Matrix &h, Matrix &y, ActFunc InvAFGrad, Matrix &Deltas);
 
 /* these typedefs will be used so that we can switch cost functions */
-typedef float (*CostFunc)(Matrix&,Matrix&,MatrixArray&,double, double);
-typedef float (*CostFuncDelta)(Matrix&,Matrix&,ActFunc,Matrix&);
+typedef double (*CostFunc)(Matrix&,Matrix&,MatrixArray&,double, double);
+typedef double (*CostFuncDelta)(Matrix&,Matrix&,ActFunc,Matrix&);
 #endif

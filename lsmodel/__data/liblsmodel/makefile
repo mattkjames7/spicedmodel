@@ -22,6 +22,8 @@ obj:
 	
 	#source code
 	$(CCo) activationfunctions.cc -o activationfunctions.o
+	$(CCo) annmodel.cc -o annmodel.o
+	$(CCo) annmavmodel.cc -o annmavmodel.o
 	$(CCo) avmodel.cc -o avmodel.o
 	$(CCo) avpsmodel.cc -o avpsmodel.o
 	$(CCo) avptmodel.cc -o avptmodel.o
@@ -30,13 +32,16 @@ obj:
 	$(CCo) backpropagate.cc -o backpropagate.o
 	$(CCo) boxcox.cc -o boxcox.o
 	$(CCo) cliplog.cc -o cliplog.o
+	$(CCo) costfunction.cc -o costfunction.o
 	$(CCo) matrix.cc -o matrix.o
 	$(CCo) matrixarray.cc -o matrixarray.o
 	$(CCo) matrixmath.cc -o matrixmath.o
+	$(CCo) networkfunc.cc -o networkfunc.o
 	$(CCo) polynomial.cc -o polynomial.o
 	$(CCo) randomnumber.cc -o randomnumber.o
 	$(CCo) readarray.cc -o readarray.o
 	$(CCo) regularization.cc -o regularization.o
+	$(CCo) rescale.cc -o rescale.o
 	$(CCo) reversearray.cc -o reversearray.o
 	$(CCo) softmax.cc -o softmax.o
 

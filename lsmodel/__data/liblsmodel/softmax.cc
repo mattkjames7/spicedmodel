@@ -27,7 +27,7 @@ void softmax(Matrix z, Matrix &sm) {
 	k = z.shape[1];
 	
 	/* loop through each one */
-	for (i=0;i<n;i++) {
+	for (i=0;i<m;i++) {
 		tot = 0.0;
 		/* calculate the total */
 		for (j=0;j<k;j++) {
@@ -35,7 +35,7 @@ void softmax(Matrix z, Matrix &sm) {
 		}
 		/* now calculate the softmax */
 		for (j=0;j<k;j++) {
-			sm->data[i][j] = expf(z.data[i][j])/tot;
+			sm.data[i][j] = expf(z.data[i][j])/tot;
 		}
 	}
 }

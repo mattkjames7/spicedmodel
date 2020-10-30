@@ -43,15 +43,15 @@
  * 									memory.
  *
  * ********************************************************************/
-MatrixArray::MatrixArray(unsigned char *memstart) {
+MatrixArray::MatrixArray(unsigned char **memstart) {
 	
 	/* create a pointer that we can move through the memory */
-	unsigned char *p = memstart;
+	unsigned char *p = *memstart;
 	
 	/* firstly, we need to work out the number of arrays */
 	MatrixArray::n = ((int*) p)[0];
 	p += sizeof(int);
-	
+
 	/* now we know that, we can create the empty matrix objects ready
 	 * for initialization */
 	int i, j, k, shape[2], ns, size;
@@ -63,11 +63,16 @@ MatrixArray::MatrixArray(unsigned char *memstart) {
 		/* start with reading the shape in */
 		size = ((int*) p)[0];
 		ns = ((int*) p)[1];
-		shape[0] = ((int*) p)[2];
-		shape[1] = ((int*) p)[3];
+		if (ns == 1) {
+			shape[1] = ((int*) p)[2];
+			shape[0] = 1;
+			p += 3*sizeof(int);
+		} else {
+			shape[0] = ((int*) p)[2];
+			shape[1] = ((int*) p)[3];
+			p += 4*sizeof(int);
+		}
 		
-		/* move the pointer */
-		p += 4*sizeof(int);
 		
 		/*create the matrix */
 		MatrixArray::matrix[i] = new Matrix(shape);
@@ -80,6 +85,8 @@ MatrixArray::MatrixArray(unsigned char *memstart) {
 			}
 		}
 	 }
+	 /*update the initial pointer */
+	 memstart[0] = p;
 	
 }
 

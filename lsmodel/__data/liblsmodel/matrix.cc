@@ -366,6 +366,28 @@ void Matrix::FillMatrix(double **filldata) {
 }
 
 /***********************************************************************
+ * NAME : 			Matrix::FillMatrix(filldata)
+ * 
+ * DESCRIPTION : 	Copy the contents from a 2D array into this one.
+ * 
+ * INPUTS : 
+ * 		float 		**filldata	The array from which data will be copied.
+ * 
+ * ********************************************************************/
+void Matrix::FillMatrix(float **filldata) {
+	int i,j;
+	#pragma omp parallel private(i,j)
+	{
+		#pragma omp for schedule(dynamic) 
+		for (i=0;i<Matrix::shape[0];i++) {
+			for (j=0;j<Matrix::shape[1];j++) {
+				Matrix::data[i][j] = (double) filldata[i][j];
+			}
+		}
+	}
+}
+
+/***********************************************************************
  * NAME : 			Matrix::FillMatrix(outdata)
  * 
  * DESCRIPTION : 	Copy the contents from this matrix into a 2D array.
@@ -382,6 +404,28 @@ void Matrix::ReturnMatrix(double **outdata) {
 		for (i=0;i<Matrix::shape[0];i++) {
 			for (j=0;j<Matrix::shape[1];j++) {
 				outdata[i][j] = Matrix::data[i][j];
+			}
+		}
+	}
+}
+
+/***********************************************************************
+ * NAME : 			Matrix::FillMatrix(outdata)
+ * 
+ * DESCRIPTION : 	Copy the contents from this matrix into a 2D array.
+ * 
+ * OUTPUTS : 
+ * 		float 		**outdata	The output array.
+ * 
+ * ********************************************************************/
+void Matrix::ReturnMatrix(float **outdata) {
+	int i,j;
+	#pragma omp parallel private(i,j)
+	{
+		#pragma omp for schedule(dynamic) 
+		for (i=0;i<Matrix::shape[0];i++) {
+			for (j=0;j<Matrix::shape[1];j++) {
+				outdata[i][j] = (float) Matrix::data[i][j];
 			}
 		}
 	}

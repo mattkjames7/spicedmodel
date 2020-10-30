@@ -25,7 +25,7 @@ using namespace std;
  * 
  * ********************************************************************/
 void BoxCox(int n, float *x, float lambda, float shift, float mu, float sig, float *xt);
-
+float BoxCox(float x, float lambda, float shift, float mu, float sig);
 
 
 /***********************************************************************
@@ -46,3 +46,4 @@ void BoxCox(int n, float *x, float lambda, float shift, float mu, float sig, flo
  * 
  * ********************************************************************/
 void ReverseBoxCox(int n, float *xt, float lambda, float shift, float mu, float sig, float *x);
+float ReverseBoxCox(float xt, float lambda, float shift, float mu, float sig);

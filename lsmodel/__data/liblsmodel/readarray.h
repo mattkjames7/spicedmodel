@@ -29,6 +29,26 @@ using namespace std;
  * ********************************************************************/
 unsigned char * readArray(unsigned char *p, float **v, int *n);
 
+
+/***********************************************************************
+ * NAME : 	unsigned char * readArray(p,v,n)
+ * 
+ * DESCRIPTION : Reads in a 1D integer point array from memory given a 
+ * 				pointer.
+ * 
+ * INPUTS : 
+ * 		unsigned char	*p	Pointer to the memory address to start from
+ * 		
+ * OUTPUTS : 
+ * 		int 			*v 	This will contain the array of floats
+ * 		int				*n	The number of elements within v
+ * 
+ * RETURNS : 
+ * 		unsigned char	*p	New pointer address
+ *  
+ * ********************************************************************/
+unsigned char * readArray(unsigned char *p, int **v, int *n);
+
 /***********************************************************************
  * NAME : 	unsigned char * readArray(p,v,shape)
  * 

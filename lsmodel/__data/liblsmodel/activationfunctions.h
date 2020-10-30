@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <algorithm>
+#include <string.h>
+
 using namespace std;
 
 /***********************************************************************
@@ -171,4 +173,24 @@ double AF_InverseTanh(double a);
 double AF_InverseTanhGradient(double a);
 
 typedef double (*ActFunc)(double);
+
+/***********************************************************************
+ * NAME : 			ActFunc AFFromString(str)
+ * 
+ * DESCRIPTION : 	Returns a pointer to the activation function which
+ * 					matches the input string.
+ * 
+ * INPUTS :
+ * 		const char *str		String naming the type of activation 
+ * 							function to use, can be any of the 
+ * 							following: 'leaky_relu'|'relu'|'linear'|
+ * 							'softplus'|'sigmoid'|'tanh'
+ * 
+ * RETURNS :
+ * 		ActFunc		Pointer to the activation function
+ * 
+ * ********************************************************************/
+ActFunc AFFromString(const char *str);
+
+
 #endif

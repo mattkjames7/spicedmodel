@@ -130,6 +130,7 @@ double AF_InverseSigmoidGradient(double a) {
  * 
  * ********************************************************************/
 double AF_Softplus(double z) { 
+	
 	if (z > 50.0) {
 		return z;
 	} else {
@@ -211,4 +212,46 @@ double AF_InverseTanh(double a) {
  * ********************************************************************/
 double AF_InverseTanhGradient(double a) {
 	return AF_TanhGradient(AF_InverseTanh(a));
+}
+
+/***********************************************************************
+ * NAME : 			ActFunc AFFromString(str)
+ * 
+ * DESCRIPTION : 	Returns a pointer to the activation function which
+ * 					matches the input string.
+ * 
+ * INPUTS :
+ * 		const char *str		String naming the type of activation 
+ * 							function to use, can be any of the 
+ * 							following: 'leaky_relu'|'relu'|'linear'|
+ * 							'softplus'|'sigmoid'|'tanh'
+ * 
+ * RETURNS :
+ * 		ActFunc		Pointer to the activation function
+ * 
+ * ********************************************************************/
+ActFunc AFFromString(const char *str) {
+
+	if (strcmp(str,"sigmoid") == 0) {
+		/* sigmoid function  */
+		return AF_Sigmoid;
+	} else if (strcmp(str,"leaky_relu") == 0) {
+		/* leaky relu function */
+		return AF_LeakyReLU;
+	} else if (strcmp(str,"relu") == 0) {
+		/* return the relu function */
+		return AF_ReLU;
+	} else if (strcmp(str,"linear") == 0) {
+		/* linear function */
+		return AF_Linear;
+	} else if (strcmp(str,"softplus") == 0) {
+		/* softplus function */
+		return AF_Softplus;
+	} else if (strcmp(str,"tanh") == 0) {
+		/* tanh function */
+		return AF_Tanh;
+	} else {
+		/* if no match then return sigmoid as default */
+		return AF_Sigmoid;
+	}
 }

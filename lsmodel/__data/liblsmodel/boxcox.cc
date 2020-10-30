@@ -40,6 +40,13 @@ void BoxCox(int n, float *x, float lambda, float shift, float mu, float sig, flo
 }
 
 
+float BoxCox(float x, float lambda, float shift, float mu, float sig) {
+	float xt = x + shift;
+	xt = (powf(xt,lambda) - 1.0)/lambda;
+	xt = (xt - mu)/sig;
+	return xt;
+}
+
 /***********************************************************************
  * NAME :  void ReverseBoxCox(n,xt,lambda,shift,mu,sig,x)
  * 
@@ -82,4 +89,11 @@ void ReverseBoxCox(int n, float *xt, float lambda, float shift, float mu, float 
 		x[i] = x[i] - shift;
 	}
 
+}
+
+
+float ReverseBoxCox(float xt, float lambda, float shift, float mu, float sig) {
+	float x = xt*sig + mu;
+	x = powf(x*lambda + 1.0,1.0/lambda) - shift;
+	return x;
 }
