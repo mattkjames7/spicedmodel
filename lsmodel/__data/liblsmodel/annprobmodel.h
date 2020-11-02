@@ -1,18 +1,19 @@
-#ifndef __ANNMAVMODEL_H__
-#define __ANNMAVMODEL_H__
+#ifndef __ANNPROBMODEL_H__
+#define __ANNPROBMODEL_H__
 #include <stdio.h>
 #include <stdlib.h>
 #include "annmodel.h"
 using namespace std;
 
 
-class ANNMavModel: public ANNModel {
+#endif
+class ANNProbModel: public ANNModel {
 	public:
 		/* constructor for the model object */
-		ANNMavModel(unsigned char *);
+		ANNProbModel(unsigned char *);
 		
 		/* destructor for the model object */
-		~ANNMavModel();
+		~ANNProbModel();
 		
 
 		
@@ -21,5 +22,4 @@ class ANNMavModel: public ANNModel {
 		void ModelCart(int,float*,float*,float*,bool,bool,bool,int,int,float*);	
 };
 
-#endif
 

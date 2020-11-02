@@ -24,6 +24,9 @@ obj:
 	$(CCo) activationfunctions.cc -o activationfunctions.o
 	$(CCo) annmodel.cc -o annmodel.o
 	$(CCo) annmavmodel.cc -o annmavmodel.o
+	$(CCo) annprobmodel.cc -o annprobmodel.o
+	$(CCo) annpsmodel.cc -o annpsmodel.o
+	$(CCo) annptmodel.cc -o annptmodel.o
 	$(CCo) avmodel.cc -o avmodel.o
 	$(CCo) avpsmodel.cc -o avpsmodel.o
 	$(CCo) avptmodel.cc -o avptmodel.o
@@ -44,9 +47,16 @@ obj:
 	$(CCo) rescale.cc -o rescale.o
 	$(CCo) reversearray.cc -o reversearray.o
 	$(CCo) softmax.cc -o softmax.o
+	
+	$(CCo) tests/matdot.cc -o tests/matdot.o
+	$(CCo) tests/netfunc.cc -o tests/netfunc.o
+	$(CCo) tests/probmodels.cc -o tests/probmodels.o
+	$(CCo) tests/mavmodels.cc -o tests/mavmodels.o
+	$(CCo) tests/psmodels.cc -o tests/psmodels.o
+	$(CCo) tests/ptmodels.cc -o tests/ptmodels.o
 
 test:
-	$(CC) *.o test.cc -o test
+	$(CC) *.o tests/*.o test.cc -o test
 
 	
 exec:
@@ -55,4 +65,4 @@ exec:
 
 	
 clean:
-	rm -v *.o exe test
+	rm -v *.o tests/*.o exe test

@@ -2,15 +2,12 @@
 #define __TEST_H__
 #include <stdio.h>
 #include <stdlib.h>
-#include "avmavmodel.h"
-#include "avprobmodel.h"
-#include "avpsmodel.h"
-#include "avptmodel.h"
-#include "readarray.h"
-#include "matrixarray.h"
-#include "networkfunc.h"
-#include "rescale.h"
-#include "annmavmodel.h"
+#include "tests/matdot.h"
+#include "tests/netfunc.h"
+#include "tests/probmodels.h"
+#include "tests/mavmodels.h"
+#include "tests/psmodels.h"
+#include "tests/ptmodels.h"
 #endif
 using namespace std;
 extern unsigned char _binary_mav_bin_start;

@@ -5,7 +5,6 @@
 #include "avmodel.h"
 #include <algorithm>
 
-#endif
 class AvProbModel: public AvModel {
 	public:
 		/* model constructor */
@@ -26,4 +25,5 @@ class AvProbModel: public AvModel {
 		void ModelCart(int,float*,float*,bool,bool,bool,int,int,float*);
 };
 
+#endif
 

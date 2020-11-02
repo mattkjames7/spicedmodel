@@ -5,7 +5,6 @@
 #include "avmodel.h"
 #include <algorithm>
 
-#endif
 class AvMavModel: public AvModel {
 	public:
 		/* model constructor */
@@ -27,3 +26,4 @@ class AvMavModel: public AvModel {
 };
 
 
+#endif

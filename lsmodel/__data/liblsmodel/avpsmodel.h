@@ -7,7 +7,6 @@
 #include "boxcox.h"
 #include "polynomial.h"
 #include "reversearray.h"
-#endif
 class AvPSModel: public AvModel {
 	public:
 		/* model constructor */
@@ -27,5 +26,5 @@ class AvPSModel: public AvModel {
 		void Model(int,float*,float*,bool,bool,bool,int,int,bool,float*);
 		void ModelCart(int,float*,float*,bool,bool,bool,int,int,bool,float*);
 };
-
+#endif
 

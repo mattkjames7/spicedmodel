@@ -7,7 +7,6 @@
 #include "boxcox.h"
 #include "polynomial.h"
 #include "reversearray.h"
-#endif
 class AvPTModel: public AvModel {
 	public:
 		/* model constructor */
@@ -29,3 +28,4 @@ class AvPTModel: public AvModel {
 };
 
 
+#endif
