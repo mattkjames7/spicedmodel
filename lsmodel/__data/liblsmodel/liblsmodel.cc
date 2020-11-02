@@ -1,6 +1,12 @@
 #include "liblsmodel.h"
 
-
+/***********************************************************************
+ * NAME : 	void initModels()
+ * 
+ * DESCRIPTION : 
+ * 		Initializes the model objects.
+ * 
+ * ********************************************************************/
 void initModels() {
 	/* check if the average models are loaded */
 	if (gAvMav == NULL) {
@@ -74,8 +80,8 @@ void getAvMav(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
  * 
  * INPUTS : 
  * 		int		n			Number of points to evaluate model at.
- * 		float	*x			Array of x-position (SM coords, in R_E)
- * 		float 	*y			Array of y-position (SM coords, in R_E)
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
  * 		bool	ShowDC		If true, DC component included in output.
  * 		bool	OnlyDC		If true, only DC component is output.
  * 		bool	Validate	If true, all points will be checked to see
@@ -142,8 +148,8 @@ void getScaledMav(int n, float *mlt, float *R, float *f107, bool ShowDC,
  * 
  * INPUTS : 
  * 		int		n			Number of points to evaluate model at.
- * 		float	*x			Array of x-position (SM coords, in R_E)
- * 		float 	*y			Array of y-position (SM coords, in R_E)
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
  * 		float 	*f107		Array of F10.7 indices
  * 		bool	ShowDC		If true, DC component included in output.
  * 		bool	OnlyDC		If true, only DC component is output.
@@ -202,7 +208,28 @@ void getAvProb(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
 }
 
 
-
+/***********************************************************************
+ * NAME : 	void getAvProbCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the probability model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getAvProbCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, float *out) {
 	
@@ -214,7 +241,29 @@ void getAvProbCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 	
 }
 
-
+/***********************************************************************
+ * NAME : 	void getScaledProb(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled probability model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledProb(int n, float *mlt, float *R, float *smr, bool ShowDC, 
 				bool OnlyDC, bool Validate, int m0, int m1, float *out) {
 	
@@ -227,7 +276,29 @@ void getScaledProb(int n, float *mlt, float *R, float *smr, bool ShowDC,
 }
 
 
-
+/***********************************************************************
+ * NAME : 	void getScaledProbCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled probability model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledProbCart(int n, float *x, float *y, float *smr, bool ShowDC,
 				bool OnlyDC,bool Validate, int m0, int m1, float *out) {
 	
@@ -275,7 +346,28 @@ void getAvPS(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
 }
 
 
-
+/***********************************************************************
+ * NAME : 	void getAvPSCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the plasmaspheric electron density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getAvPSCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, bool RevTrans, float *out) {
 	
@@ -287,7 +379,29 @@ void getAvPSCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 	
 }
 
-
+/***********************************************************************
+ * NAME : 	void getScaledPS(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmaspheric electron density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledPS(int n, float *mlt, float *R, float *smr, bool ShowDC, 
 				bool OnlyDC, bool Validate, int m0, int m1, bool RevTrans, float *out) {
 	
@@ -300,7 +414,29 @@ void getScaledPS(int n, float *mlt, float *R, float *smr, bool ShowDC,
 }
 
 
-
+/***********************************************************************
+ * NAME : 	void getScaledPSCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmaspheric electron density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledPSCart(int n, float *x, float *y, float *smr, bool ShowDC,
 				bool OnlyDC,bool Validate, int m0, int m1, bool RevTrans, float *out) {
 	
@@ -349,7 +485,28 @@ void getAvPT(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
 }
 
 
-
+/***********************************************************************
+ * NAME : 	void getAvPTCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the plasmatrough electron density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getAvPTCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, bool RevTrans, float *out) {
 	
@@ -361,7 +518,29 @@ void getAvPTCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 	
 }
 
-
+/***********************************************************************
+ * NAME : 	void getScaledPT(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmatrough electron density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledPT(int n, float *mlt, float *R, float *smr, bool ShowDC, 
 				bool OnlyDC, bool Validate, int m0, int m1, bool RevTrans, float *out) {
 	
@@ -374,7 +553,29 @@ void getScaledPT(int n, float *mlt, float *R, float *smr, bool ShowDC,
 }
 
 
-
+/***********************************************************************
+ * NAME : 	void getScaledPTCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmatrough electron density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledPTCart(int n, float *x, float *y, float *smr, bool ShowDC,
 				bool OnlyDC,bool Validate, int m0, int m1, bool RevTrans, float *out) {
 	
@@ -387,6 +588,29 @@ void getScaledPTCart(int n, float *x, float *y, float *smr, bool ShowDC,
 }
 
 
+/***********************************************************************
+ * NAME : 	void getAvDen(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the combined plasmasphere/plasmatrough electron 
+ * 		density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getAvDen(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, float *out) {
 	
@@ -420,6 +644,29 @@ void getAvDen(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
 	
 }
 
+/***********************************************************************
+ * NAME : 	void getAvDenCart(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the combined plasmasphere/plasmatrough electron 
+ * 		density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getAvDenCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, float *out) {
 	
@@ -453,7 +700,30 @@ void getAvDenCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 	
 }
 
-
+/***********************************************************************
+ * NAME : 	void getScaledDen(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmasphere/plasmatrough electron 
+ * 		density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledDen(int n, float *mlt, float *R, float *smr, bool ShowDC,  
 				bool OnlyDC, bool Validate, int m0, int m1, float *out) {
 	
@@ -487,6 +757,30 @@ void getScaledDen(int n, float *mlt, float *R, float *smr, bool ShowDC,
 	
 }
 
+/***********************************************************************
+ * NAME : 	void getScaledDenCart(n,x,y,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmasphere/plasmatrough electron 
+ * 		density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledDenCart(int n, float *x, float *y, float *smr, bool ShowDC,  
 				bool OnlyDC, bool Validate, int m0, int m1, float *out) {
 	
@@ -521,7 +815,29 @@ void getScaledDenCart(int n, float *x, float *y, float *smr, bool ShowDC,
 }
 
 
-
+/***********************************************************************
+ * NAME : 	void getAvPMD(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the combined plasmasphere/plasmatrough plasma mass
+ * 		density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getAvPMD(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, float *out) {
 	
@@ -558,6 +874,29 @@ void getAvPMD(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
 	
 }
 
+/***********************************************************************
+ * NAME : 	void getAvPMDCart(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the combined plasmasphere/plasmatrough plasma mass
+ * 		density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getAvPMDCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, float *out) {
 	
@@ -594,7 +933,31 @@ void getAvPMDCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 	
 }
 
-
+/***********************************************************************
+ * NAME : 	void getScaledPMD(n,mlt,R,f107,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled combined plasmasphere/plasmatrough plasma 
+ * 		mass density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		float 	*f107		Array of F10.7 indices.
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledPMD(int n, float *mlt, float *R, float *f107, float *smr, bool ShowDC,  
 				bool OnlyDC, bool Validate, int m0, int m1, float *out) {
 	
@@ -631,6 +994,31 @@ void getScaledPMD(int n, float *mlt, float *R, float *f107, float *smr, bool Sho
 	
 }
 
+/***********************************************************************
+ * NAME : 	void getScaledPMDCart(n,x,y,f107,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled combined plasmasphere/plasmatrough plasma 
+ * 		mass density model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		float 	*f107		Array of F10.7 indices.
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
 void getScaledPMDCart(int n, float *x, float *y, float *f107, float *smr, bool ShowDC,  
 				bool OnlyDC, bool Validate, int m0, int m1, float *out) {
 	
