@@ -910,11 +910,11 @@ void getAvPMDCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 	float *pt = new float[n];
 	
 	/* run the models */
-	gAvMav->Model(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,mav);
+	gAvMav->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,mav);
 	gAvProb->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,prob);
 	gAvPS->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,true,ps);
 	gAvPT->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,true,pt);
-	
+
 	/* select the appropriate densities base upon prob */
 	int i;
 	for (i=0;i<n;i++) {
@@ -924,7 +924,7 @@ void getAvPMDCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 			out[i] = pt[i]*mav[i];
 		}
 	}
-	
+
 	/* delete temporary arrays */
 	delete mav;
 	delete prob;
@@ -1032,7 +1032,7 @@ void getScaledPMDCart(int n, float *x, float *y, float *f107, float *smr, bool S
 	float *pt = new float[n];
 	
 	/* run the models */
-	gAnnMav->Model(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,mav);
+	gAnnMav->ModelCart(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,mav);
 	gAnnProb->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,prob);
 	gAnnPS->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,true,ps);
 	gAnnPT->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,true,pt);

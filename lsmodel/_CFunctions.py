@@ -76,7 +76,7 @@ _CgetScaledMavCart.restype = None
 _CgetScaledMavCart.argtypes = [	c_int,			#number of positions
 								c_float_ptr,	#x array
 								c_float_ptr,	#y array
-								c_float_ptr		#F10.7
+								c_float_ptr,	#F10.7
 								c_bool,			#ShowDC
 								c_bool,			#OnlyDC
 								c_bool,			#Validate
@@ -127,7 +127,7 @@ _CgetScaledProbCart.restype = None
 _CgetScaledProbCart.argtypes = [	c_int,			#number of positions
 									c_float_ptr,	#x array
 									c_float_ptr,	#y array
-									c_float_ptr		#SMR
+									c_float_ptr,	#SMR
 									c_bool,			#ShowDC
 									c_bool,			#OnlyDC
 									c_bool,			#Validate
@@ -181,7 +181,7 @@ _CgetScaledPSCart.restype = None
 _CgetScaledPSCart.argtypes = [	c_int,			#number of positions
 									c_float_ptr,	#x array
 									c_float_ptr,	#y array
-									c_float_ptr		#SMR
+									c_float_ptr,	#SMR
 									c_bool,			#ShowDC
 									c_bool,			#OnlyDC
 									c_bool,			#Validate
@@ -236,7 +236,7 @@ _CgetScaledPTCart.restype = None
 _CgetScaledPTCart.argtypes = [	c_int,			#number of positions
 									c_float_ptr,	#x array
 									c_float_ptr,	#y array
-									c_float_ptr		#SMR
+									c_float_ptr,	#SMR
 									c_bool,			#ShowDC
 									c_bool,			#OnlyDC
 									c_bool,			#Validate
@@ -288,7 +288,7 @@ _CgetScaledDenCart.restype = None
 _CgetScaledDenCart.argtypes = [	c_int,			#number of positions
 									c_float_ptr,	#x array
 									c_float_ptr,	#y array
-									c_float_ptr		#SMR
+									c_float_ptr,	#SMR
 									c_bool,			#ShowDC
 									c_bool,			#OnlyDC
 									c_bool,			#Validate
@@ -340,8 +340,8 @@ _CgetScaledPMDCart.restype = None
 _CgetScaledPMDCart.argtypes = [	c_int,			#number of positions
 									c_float_ptr,	#x array
 									c_float_ptr,	#y array
-									c_float_ptr		#F10.7
-									c_float_ptr		#SMR
+									c_float_ptr,	#F10.7
+									c_float_ptr,	#SMR
 									c_bool,			#ShowDC
 									c_bool,			#OnlyDC
 									c_bool,			#Validate
