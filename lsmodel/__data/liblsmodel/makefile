@@ -2,10 +2,10 @@
 CFLAGS=-lm -fopenmp
 
 # Compiler
-CCo=g++ -c $(CFLAGS)
+CCo=g++ -fPIC -c $(CFLAGS)
 CC=g++ $(CFLAGS)
 
-all: obj test
+all: obj test lib
 
 obj:
 	#these are the average model parameters
@@ -48,6 +48,7 @@ obj:
 	$(CCo) reversearray.cc -o reversearray.o
 	$(CCo) softmax.cc -o softmax.o
 	
+	
 	$(CCo) tests/matdot.cc -o tests/matdot.o
 	$(CCo) tests/netfunc.cc -o tests/netfunc.o
 	$(CCo) tests/probmodels.cc -o tests/probmodels.o
@@ -59,10 +60,9 @@ test:
 	$(CC) *.o tests/*.o test.cc -o test
 
 	
-exec:
-	$(CC) *.o -o exe
-	
 
+lib:
+	$(CC) liblsmodel.cc *.o -fPIC -shared -o liblsmodel.so
 	
 clean:
 	rm -v *.o tests/*.o exe test
