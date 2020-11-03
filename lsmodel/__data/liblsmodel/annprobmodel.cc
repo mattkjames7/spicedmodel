@@ -1,9 +1,9 @@
 #include "annprobmodel.h"
 
 /***********************************************************************
- * NAME : AvModel(ptr)
+ * NAME : ANNProbModel(ptr)
  * 
- * DESCRIPTION : Constructor of the AvModel object.
+ * DESCRIPTION : Constructor of the ANNProbModel object.
  * 
  * INPUTS : 
  * 		unsigned char	*ptr	pointer to the area of memory where the
@@ -20,9 +20,9 @@ ANNProbModel::ANNProbModel(unsigned char *ptr) {
 }
 
 /***********************************************************************
- * NAME : ~AvModel()
+ * NAME : ~ANNProbModel()
  * 
- * DESCRIPTION :Destructor for the AvModel object
+ * DESCRIPTION :Destructor for the ANNProbModel object
  * 
  * 
  * ********************************************************************/
@@ -38,7 +38,7 @@ ANNProbModel::~ANNProbModel() {
 
 
 /***********************************************************************
- * NAME : void ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : void ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : Calculates the model at a number of Cartesian x and y
  * 				positions.
@@ -47,6 +47,7 @@ ANNProbModel::~ANNProbModel() {
  * 		int		n			The number of elements
  * 		float	*x			SM x-coordinate
  * 		float 	*y			SM y-coordinate
+ * 		float	*smr		The SMR index
  * 		bool	ShowDC		If true then the DC component will be included
  * 		bool	OnlyDC		If true ONLY the DC component will be included
  * 		bool	Validate	If true, then all elements will be checked
@@ -58,12 +59,13 @@ ANNProbModel::~ANNProbModel() {
  * 		int		m1			The final m number to include
  * 
  * OUTPUTS : 
- * 		float	*out		The model average ion mass
+ * 		float	*out		The probability model.
  * 
  * 
  * ********************************************************************/
 void ANNProbModel::ModelCart(int n, float *x, float *y, float *smr,
-			bool ShowDC, bool OnlyDC, bool Validate, int m0, int m1, float *out) {
+							bool ShowDC, bool OnlyDC, bool Validate, 
+							int m0, int m1, float *out) {
 				
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];
@@ -79,7 +81,7 @@ void ANNProbModel::ModelCart(int n, float *x, float *y, float *smr,
 }
 
 /***********************************************************************
- * NAME : void Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : void Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : Calculates the model at a number of positions in MLT 
  * 				and R.
@@ -88,6 +90,7 @@ void ANNProbModel::ModelCart(int n, float *x, float *y, float *smr,
  * 		int		n			The number of elements
  * 		float	*mlt		Magnetic local time
  * 		float 	*R			The radial distance (L-shell)
+ * 		float	*smr		The SMR index
  * 		bool	ShowDC		If true then the DC component will be included
  * 		bool	OnlyDC		If true ONLY the DC component will be included
  * 		bool	Validate	If true, then all elements will be checked
@@ -99,12 +102,13 @@ void ANNProbModel::ModelCart(int n, float *x, float *y, float *smr,
  * 		int		m1			The final m number to include
  * 
  * OUTPUTS : 
- * 		float	*out		The model average ion mass
+ * 		float	*out		The probability model.
  * 
  * 
  * ********************************************************************/
-void ANNProbModel::Model(int n, float *mlt, float *R, float *smr, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, float *out){
+void ANNProbModel::Model(int n, float *mlt, float *R, float *smr, 
+						bool ShowDC, bool OnlyDC, bool Validate, 
+						int m0, int m1, float *out){
 	
 	/* create the arrays to store dc and periodic components of the model */
 	int i, j;

@@ -14,7 +14,7 @@
 AvPTModel::AvPTModel(unsigned char *ptr) {
 	
 	/* all we need to do is initialize the object by reading in the 
-	 * model parameters from the provided memor address */
+	 * model parameters from the provided memory address */
 	ReadModelParams(ptr);
 	
 	/* reverse the elements of the DC polynomial */
@@ -37,7 +37,7 @@ AvPTModel::AvPTModel(unsigned char *ptr) {
 /***********************************************************************
  * NAME : ~AvPTModel()
  * 
- * DESCRIPTION :Destructor for the AvModel object
+ * DESCRIPTION :Destructor for the AvPTModel object
  * 
  * 
  * ********************************************************************/
@@ -105,8 +105,9 @@ void AvPTModel::DC(int n, float *R, float *dc) {
  * 
  * 
  * ********************************************************************/
-void AvPTModel::ModelCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, bool RevTrans, float *out) {
+void AvPTModel::ModelCart(int n, float *x, float *y, 
+							bool ShowDC, bool OnlyDC, bool Validate, 
+							int m0, int m1, bool RevTrans, float *out) {
 				
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];
@@ -146,8 +147,9 @@ void AvPTModel::ModelCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
  * 
  * 
  * ********************************************************************/
-void AvPTModel::Model(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, bool RevTrans, float *out){
+void AvPTModel::Model(int n, float *mlt, float *R, 
+						bool ShowDC, bool OnlyDC, bool Validate, 
+						int m0, int m1, bool RevTrans, float *out){
 	
 	/* create the arrays to store dc and periodic components of the model */
 	int i, j;
@@ -239,7 +241,8 @@ void AvPTModel::Model(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
  * 
  * 
  * ********************************************************************/
-void AvPTModel::ModelComponents(int n, float *mlt, float *R, float *dc, float **per) {
+void AvPTModel::ModelComponents(int n, float *mlt, float *R, 
+								float *dc, float **per) {
 
 	/* get the DC bit of the model */
 	DC(n,R,dc);
@@ -250,7 +253,7 @@ void AvPTModel::ModelComponents(int n, float *mlt, float *R, float *dc, float **
 } 
 
 /***********************************************************************
- * NAME : void ModelComponents(n,mlt,R,dc,per)
+ * NAME : void ModelComponents(n,x,y,dc,per)
  * 
  * DESCRIPTION : Calculates the individual model components at a number 
  * 				of Cartisian positions x and y.
@@ -268,7 +271,8 @@ void AvPTModel::ModelComponents(int n, float *mlt, float *R, float *dc, float **
  * 
  * 
  * ********************************************************************/
-void AvPTModel::ModelComponentsCart(int n, float *x, float *y, float *dc, float **per) {
+void AvPTModel::ModelComponentsCart(int n, float *x, float *y, 
+									float *dc, float **per) {
 	
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];

@@ -65,4 +65,4 @@ lib:
 	$(CC) liblsmodel.cc *.o -fPIC -shared -o liblsmodel.so
 	
 clean:
-	rm -v *.o tests/*.o exe test
+	rm -v *.o tests/*.o test liblsmodel.so

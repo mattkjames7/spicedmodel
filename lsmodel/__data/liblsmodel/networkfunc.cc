@@ -1,5 +1,28 @@
 #include "networkfunc.h"
 
+/***********************************************************************
+ * NAME : NetworkFunc(L,s,sHiddenFunc,sOutFunc,sCostFunc)
+ * 
+ * DESCRIPTION : This is the constructor for the NetworkFunc object, 
+ * 				which will create an empty network.
+ * 
+ * INPUTS : 
+ * 		int			L		The number of layers in the network.
+ * 		int			*s		Array containing the number of nodes in each
+ * 							layer.
+ *		const char	*sHiddenFunc	String naming the activation 
+ * 									functions used in each hidden layer.
+ * 									"sigmoid"|"relu"|"linear"|"softplus"
+ * 									|"tanh"
+ *		const char 	*sOutFunc		String naming the activation
+ * 									function used in the output layer.
+ * 		const char	*sCostFunction	String naming the cost function used
+ * 									although this is not actually needed
+ * 									in this object currently.
+ * 									"mean_squared"|"cross_entropy"
+ * 
+ * 
+ * ********************************************************************/
 NetworkFunc::NetworkFunc(int L, int *s, const char * sHiddenFunc,
 						const char *sOutFunc, const char *sCostFunc) {
 	
@@ -48,6 +71,29 @@ NetworkFunc::NetworkFunc(int L, int *s, const char * sHiddenFunc,
 							
 }
 
+/***********************************************************************
+ * NAME : NetworkFunc(L,s,sHiddenFunc,sOutFunc,sCostFunc)
+ * 
+ * DESCRIPTION : This is the constructor for the NetworkFunc object, 
+ * 				which will load the ANN from memory.
+ * 
+ * INPUTS : 
+ * 		int			L		The number of layers in the network.
+ * 		int			*s		Array containing the number of nodes in each
+ * 							layer.
+ *		const char	*sHiddenFunc	String naming the activation 
+ * 									functions used in each hidden layer.
+ * 									"sigmoid"|"relu"|"linear"|"softplus"
+ * 									|"tanh"
+ *		const char 	*sOutFunc		String naming the activation
+ * 									function used in the output layer.
+ * 		const char	*sCostFunction	String naming the cost function used
+ * 									although this is not actually needed
+ * 									in this object currently.
+ * 									"mean_squared"|"cross_entropy"
+ * 
+ * 
+ * ********************************************************************/
 NetworkFunc::NetworkFunc(unsigned char *ptr, const char * sHiddenFunc,
 						const char *sOutFunc, const char *sCostFunc) {
 							
@@ -80,12 +126,23 @@ NetworkFunc::NetworkFunc(unsigned char *ptr, const char * sHiddenFunc,
 	
 }
 
-
+/***********************************************************************
+ * NAME : 	NetworkFunc(obj)
+ * 
+ * DESCRIPTION : The unfinished copy constructor for the object.
+ * 
+ * ********************************************************************/
 NetworkFunc::NetworkFunc(const NetworkFunc &obj) {
 	
 	
 }
 
+/***********************************************************************
+ * NAME : 	~NetworkFunc()
+ * 
+ * DESCRIPTION : The destructor for the object, frees memory.
+ * 
+ * ********************************************************************/
 NetworkFunc::~NetworkFunc() {
 	
 	/* delete everything created in the constructor */
@@ -100,7 +157,16 @@ NetworkFunc::~NetworkFunc() {
 	
 }
 
-
+/***********************************************************************
+ * NAME : 	_SetCostFunction(sCostFunc)
+ * 
+ * DESCRIPTION : Sets the cost function of the neural network.
+ * 
+ * INPUTS :
+ * 		const char 	*sCostFunc	The name of the cost function, accepts
+ * 								"mean_squared"|"cross_entropy".
+ * 
+ * ********************************************************************/
 void NetworkFunc::_SetCostFunction(const char *sCostFunc) {
 	
 	if (strcmp(sCostFunc,"mean_squared") == 0) {
@@ -116,6 +182,19 @@ void NetworkFunc::_SetCostFunction(const char *sCostFunc) {
 	
 }
 
+/***********************************************************************
+ * NAME : 	_PopulateActivationFunctions(sHiddenFunc,sOutFunc)
+ * 
+ * DESCRIPTION : Sets the activation functions of the neural network.
+ * 
+ * INPUTS :
+ * 		const char 	*sHiddenFunc	The name of the hidden activation 
+ * 									functions, accepts: "sigmoid"|"relu"
+ * 									|"linear"|"softplus"|"tanh"
+ * 		const char 	*sOutFunc		The name of the activation function 
+ * 									used in the output layer.
+ * 
+ * ********************************************************************/
 void NetworkFunc::_PopulateActivationFunctions(const char *sHiddenFunc, const char *sOutFunc) {
 	
 	/* if we have L layers, we need L-1 AFs, where AF[0] - AF[L-3] will
@@ -136,7 +215,18 @@ void NetworkFunc::_PopulateActivationFunctions(const char *sHiddenFunc, const ch
 	AF_[L_-2] = OF;
 	
 }
-	 
+
+/***********************************************************************
+ * NAME : 	_CreatePropagationMatrices(n)
+ * 
+ * DESCRIPTION : Creates a temporary MatrixArray object which is used
+ * 				to propagate data throught he network from input to
+ * 				output.
+ * 
+ * INPUTS :
+ * 		int		n		The number of samples.
+ * 
+ * ********************************************************************/
 MatrixArray* NetworkFunc::_CreatePropagationMatrices(int n) {
 	
 	/* get the matrix shapes first */
@@ -155,6 +245,20 @@ MatrixArray* NetworkFunc::_CreatePropagationMatrices(int n) {
 	
 }
 
+/***********************************************************************
+ * NAME : 	Predict(n,in,out)
+ * 
+ * DESCRIPTION : Takes some input data and predicts the output of the
+ * 				network.
+ * 
+ * INPUTS :
+ * 		int		n		The number of samples.
+ * 		float 	**in	This is the input matrix, shape (n,m), where m
+ * 						is the number of features (nodes in input layer)
+ * 		float	**out	This is the output matrix, shape (n,k), where
+ * 						k is the number of output nodes.
+ * 
+ * ********************************************************************/
 void NetworkFunc::Predict(int n, float **in, float **out) {
 	/* input shape should be (n,m) where n is the number of samples,
 	 * m is the number of features.
@@ -193,6 +297,17 @@ void NetworkFunc::Predict(int n, float **in, float **out) {
 	delete pmat;
 }
 
+
+/***********************************************************************
+ * NAME : 	_RescaleOut(m)
+ * 
+ * DESCRIPTION : Rescales the output matrix based on the scaling 
+ * 				parameters stored for the network.
+ * 
+ * INPUTS :
+ * 		Matrix	m	Output matrix
+ * 
+ * ********************************************************************/
 void NetworkFunc::_RescaleOut(Matrix &m) {
 	
 	int i, j;

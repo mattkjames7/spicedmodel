@@ -7,6 +7,15 @@
 #include "boxcox.h"
 #include "polynomial.h"
 #include "reversearray.h"
+
+/***********************************************************************
+ * NAME : 	class AvPTModel
+ * 
+ * DESCRIPTION : This class object is based upon the AvModel object and
+ * 				will store the plasma trough density model parameters. 
+ * 				Its member functions can be used to access the model.
+ * 
+ * ********************************************************************/
 class AvPTModel: public AvModel {
 	public:
 		/* model constructor */

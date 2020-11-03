@@ -1,6 +1,15 @@
 #include "annmodel.h"
 
-
+/***********************************************************************
+ * NAME : LoadANN(ptr)
+ * 
+ * DESCRIPTION : Loads the ANN from a memory address.
+ * 
+ * INPUTS : 
+ * 		unsigned char	*ptr	pointer to the area of memory where the
+ * 								parameters are stored.
+ * 
+ * ********************************************************************/
 void ANNModel::LoadANN(unsigned char *ptr) {
 
 	/* create the NetworkFunc object */
@@ -133,7 +142,8 @@ void ANNModel::ModelComponents(int n, float *mlt, float *R, float *S,
  * 
  * 
  * ********************************************************************/
-void ANNModel::ModelComponentsCart(int n, float *x, float *y, float *S, float *dc, float **per) {
+void ANNModel::ModelComponentsCart(int n, float *x, float *y, float *S, 
+									float *dc, float **per) {
 	
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];

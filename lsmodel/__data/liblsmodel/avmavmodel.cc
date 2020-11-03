@@ -2,9 +2,9 @@
 
 
 /***********************************************************************
- * NAME : AvModel(ptr)
+ * NAME : AvMavModel(ptr)
  * 
- * DESCRIPTION : Constructor of the AvModel object.
+ * DESCRIPTION : Constructor of the AvMavModel object.
  * 
  * INPUTS : 
  * 		unsigned char	*ptr	pointer to the area of memory where the
@@ -14,7 +14,7 @@
 AvMavModel::AvMavModel(unsigned char *ptr) {
 	
 	/* all we need to do is initialize the object by reading in the 
-	 * model parameters from the provided memor address */
+	 * model parameters from the provided memory address */
 	ReadModelParams(ptr);
 	
 	/* we could also do with storing the m-numbers and equivalent
@@ -32,9 +32,9 @@ AvMavModel::AvMavModel(unsigned char *ptr) {
 }
 
 /***********************************************************************
- * NAME : ~AvModel()
+ * NAME : ~AvMavModel()
  * 
- * DESCRIPTION :Destructor for the AvModel object
+ * DESCRIPTION :Destructor for the AvMavModel object
  * 
  * 
  * ********************************************************************/
@@ -105,8 +105,9 @@ void AvMavModel::DC(int n, float *R, float *dc) {
  * 
  * 
  * ********************************************************************/
-void AvMavModel::ModelCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, float *out) {
+void AvMavModel::ModelCart(int n, float *x, float *y, 
+							bool ShowDC, bool OnlyDC, bool Validate, 
+							int m0, int m1, float *out) {
 				
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];
@@ -146,8 +147,9 @@ void AvMavModel::ModelCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
  * 
  * 
  * ********************************************************************/
-void AvMavModel::Model(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, float *out){
+void AvMavModel::Model(int n, float *mlt, float *R, 
+						bool ShowDC, bool OnlyDC, bool Validate, 
+						int m0, int m1, float *out){
 	
 	/* create the arrays to store dc and periodic components of the model */
 	int i, j;
@@ -235,7 +237,8 @@ void AvMavModel::Model(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
  * 
  * 
  * ********************************************************************/
-void AvMavModel::ModelComponents(int n, float *mlt, float *R, float *dc, float **per) {
+void AvMavModel::ModelComponents(int n, float *mlt, float *R, 
+								float *dc, float **per) {
 
 	/* get the DC bit of the model */
 	DC(n,R,dc);
@@ -246,7 +249,7 @@ void AvMavModel::ModelComponents(int n, float *mlt, float *R, float *dc, float *
 } 
 
 /***********************************************************************
- * NAME : void ModelComponents(n,mlt,R,dc,per)
+ * NAME : void ModelComponentsCart(n,x,y,dc,per)
  * 
  * DESCRIPTION : Calculates the individual model components at a number 
  * 				of Cartisian positions x and y.
@@ -264,7 +267,8 @@ void AvMavModel::ModelComponents(int n, float *mlt, float *R, float *dc, float *
  * 
  * 
  * ********************************************************************/
-void AvMavModel::ModelComponentsCart(int n, float *x, float *y, float *dc, float **per) {
+void AvMavModel::ModelComponentsCart(int n, float *x, float *y, 
+									float *dc, float **per) {
 	
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];

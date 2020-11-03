@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#endif
+
 
 using namespace std;
 
@@ -68,3 +68,5 @@ unsigned char * readArray(unsigned char *p, int **v, int *n);
  *  
  * ********************************************************************/
 unsigned char * readArray(unsigned char *p, float ***v, int *shape);
+
+#endif

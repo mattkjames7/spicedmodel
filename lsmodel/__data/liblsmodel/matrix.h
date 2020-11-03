@@ -7,6 +7,17 @@
 
 using namespace std;
 
+/***********************************************************************
+ * NAME : Matrix
+ * 
+ * DESCRIPTION : The purpose of this object is to store a matrix as a 2D
+ * 				array. It can be filled with zeros (default) or with the
+ * 				values from another 2D array. Simple operations can be 
+ * 				performed using the member functions of the object; more
+ * 				advanced operations can be done be passing the object to 
+ * 				one of the functions in matrixmath.h.
+ * 
+ * ********************************************************************/
 class Matrix {
 	public:
 		/* Initialize matrix with zeros */

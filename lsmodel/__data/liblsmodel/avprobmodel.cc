@@ -14,7 +14,7 @@
 AvProbModel::AvProbModel(unsigned char *ptr) {
 	
 	/* all we need to do is initialize the object by reading in the 
-	 * model parameters from the provided memor address */
+	 * model parameters from the provided memory address */
 	ReadModelParams(ptr);
 	
 	/* we could also do with storing the m-numbers and equivalent
@@ -32,9 +32,9 @@ AvProbModel::AvProbModel(unsigned char *ptr) {
 }
 
 /***********************************************************************
- * NAME : ~AvModel()
+ * NAME : ~AvProbModel()
  * 
- * DESCRIPTION :Destructor for the AvModel object
+ * DESCRIPTION :Destructor for the AvProbModel object
  * 
  * 
  * ********************************************************************/
@@ -105,8 +105,9 @@ void AvProbModel::DC(int n, float *R, float *dc) {
  * 
  * 
  * ********************************************************************/
-void AvProbModel::ModelCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, float *out) {
+void AvProbModel::ModelCart(int n, float *x, float *y, 
+							bool ShowDC, bool OnlyDC, bool Validate, 
+							int m0, int m1, float *out) {
 				
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];
@@ -146,8 +147,9 @@ void AvProbModel::ModelCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
  * 
  * 
  * ********************************************************************/
-void AvProbModel::Model(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, float *out){
+void AvProbModel::Model(int n, float *mlt, float *R, 
+						bool ShowDC, bool OnlyDC, bool Validate, 
+						int m0, int m1, float *out){
 	
 	/* create the arrays to store dc and periodic components of the model */
 	int i, j;
@@ -233,7 +235,8 @@ void AvProbModel::Model(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
  * 
  * 
  * ********************************************************************/
-void AvProbModel::ModelComponents(int n, float *mlt, float *R, float *dc, float **per) {
+void AvProbModel::ModelComponents(int n, float *mlt, float *R, 
+									float *dc, float **per) {
 
 	/* get the DC bit of the model */
 	DC(n,R,dc);
@@ -244,7 +247,7 @@ void AvProbModel::ModelComponents(int n, float *mlt, float *R, float *dc, float 
 } 
 
 /***********************************************************************
- * NAME : void ModelComponents(n,mlt,R,dc,per)
+ * NAME : void ModelComponentsCart(n,x,y,dc,per)
  * 
  * DESCRIPTION : Calculates the individual model components at a number 
  * 				of Cartisian positions x and y.
@@ -262,7 +265,8 @@ void AvProbModel::ModelComponents(int n, float *mlt, float *R, float *dc, float 
  * 
  * 
  * ********************************************************************/
-void AvProbModel::ModelComponentsCart(int n, float *x, float *y, float *dc, float **per) {
+void AvProbModel::ModelComponentsCart(int n, float *x, float *y, 
+										float *dc, float **per) {
 	
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];

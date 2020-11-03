@@ -5,6 +5,14 @@
 #include "avmodel.h"
 #include <algorithm>
 
+/***********************************************************************
+ * NAME : 	class AvMavModel
+ * 
+ * DESCRIPTION : This class object is based upon the AvModel object and
+ * 				will store the average ion mass model parameters. Its 
+ * 				member functions can be used to access the model.
+ * 
+ * ********************************************************************/
 class AvMavModel: public AvModel {
 	public:
 		/* model constructor */

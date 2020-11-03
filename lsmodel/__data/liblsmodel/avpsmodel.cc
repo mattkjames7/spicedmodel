@@ -14,7 +14,7 @@
 AvPSModel::AvPSModel(unsigned char *ptr) {
 	
 	/* all we need to do is initialize the object by reading in the 
-	 * model parameters from the provided memor address */
+	 * model parameters from the provided memory address */
 	ReadModelParams(ptr);
 	
 	/* reverse the elements of the DC polynomial */
@@ -37,7 +37,7 @@ AvPSModel::AvPSModel(unsigned char *ptr) {
 /***********************************************************************
  * NAME : ~AvPSModel()
  * 
- * DESCRIPTION :Destructor for the AvModel object
+ * DESCRIPTION :Destructor for the AvPSModel object
  * 
  * 
  * ********************************************************************/
@@ -105,8 +105,9 @@ void AvPSModel::DC(int n, float *R, float *dc) {
  * 
  * 
  * ********************************************************************/
-void AvPSModel::ModelCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, bool RevTrans, float *out) {
+void AvPSModel::ModelCart(int n, float *x, float *y, 
+						bool ShowDC, bool OnlyDC, bool Validate, 
+						int m0, int m1, bool RevTrans, float *out) {
 				
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];
@@ -146,8 +147,9 @@ void AvPSModel::ModelCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
  * 
  * 
  * ********************************************************************/
-void AvPSModel::Model(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, bool RevTrans, float *out){
+void AvPSModel::Model(int n, float *mlt, float *R, 
+					bool ShowDC, bool OnlyDC, bool Validate, 
+					int m0, int m1, bool RevTrans, float *out){
 	
 	/* create the arrays to store dc and periodic components of the model */
 	int i, j;
@@ -239,7 +241,8 @@ void AvPSModel::Model(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
  * 
  * 
  * ********************************************************************/
-void AvPSModel::ModelComponents(int n, float *mlt, float *R, float *dc, float **per) {
+void AvPSModel::ModelComponents(int n, float *mlt, float *R, 
+								float *dc, float **per) {
 
 	/* get the DC bit of the model */
 	DC(n,R,dc);
@@ -250,7 +253,7 @@ void AvPSModel::ModelComponents(int n, float *mlt, float *R, float *dc, float **
 } 
 
 /***********************************************************************
- * NAME : void ModelComponents(n,mlt,R,dc,per)
+ * NAME : void ModelComponents(n,x,y,dc,per)
  * 
  * DESCRIPTION : Calculates the individual model components at a number 
  * 				of Cartisian positions x and y.
@@ -268,7 +271,8 @@ void AvPSModel::ModelComponents(int n, float *mlt, float *R, float *dc, float **
  * 
  * 
  * ********************************************************************/
-void AvPSModel::ModelComponentsCart(int n, float *x, float *y, float *dc, float **per) {
+void AvPSModel::ModelComponentsCart(int n, float *x, float *y, 
+									float *dc, float **per) {
 	
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];

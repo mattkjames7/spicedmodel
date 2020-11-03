@@ -11,6 +11,14 @@
 
 using namespace std;
 
+/***********************************************************************
+ * NAME : NetworkFunc
+ * 
+ * DESCRIPTION : An untrainable artificial neural network object. The 
+ * 				point of this is to load an ANN from memory and use it
+ * 				purely for prediction.
+ * 
+ * ********************************************************************/
 class NetworkFunc {
 	public:
 		/* this object must be loaded from memory address */

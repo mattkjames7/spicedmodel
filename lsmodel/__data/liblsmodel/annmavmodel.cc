@@ -1,9 +1,9 @@
 #include "annmavmodel.h"
 
 /***********************************************************************
- * NAME : AvModel(ptr)
+ * NAME : ANNMavModel(ptr)
  * 
- * DESCRIPTION : Constructor of the AvModel object.
+ * DESCRIPTION : Constructor of the ANNMavModel object.
  * 
  * INPUTS : 
  * 		unsigned char	*ptr	pointer to the area of memory where the
@@ -20,9 +20,9 @@ ANNMavModel::ANNMavModel(unsigned char *ptr) {
 }
 
 /***********************************************************************
- * NAME : ~AvModel()
+ * NAME : ~ANNMavModel()
  * 
- * DESCRIPTION :Destructor for the AvModel object
+ * DESCRIPTION :Destructor for the ANNMavModel object
  * 
  * 
  * ********************************************************************/
@@ -38,7 +38,7 @@ ANNMavModel::~ANNMavModel() {
 
 
 /***********************************************************************
- * NAME : void ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : void ModelCart(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : Calculates the model at a number of Cartesian x and y
  * 				positions.
@@ -47,6 +47,7 @@ ANNMavModel::~ANNMavModel() {
  * 		int		n			The number of elements
  * 		float	*x			SM x-coordinate
  * 		float 	*y			SM y-coordinate
+ * 		float	*f107		The F10.7 index
  * 		bool	ShowDC		If true then the DC component will be included
  * 		bool	OnlyDC		If true ONLY the DC component will be included
  * 		bool	Validate	If true, then all elements will be checked
@@ -63,7 +64,8 @@ ANNMavModel::~ANNMavModel() {
  * 
  * ********************************************************************/
 void ANNMavModel::ModelCart(int n, float *x, float *y, float *f107,
-			bool ShowDC, bool OnlyDC, bool Validate, int m0, int m1, float *out) {
+							bool ShowDC, bool OnlyDC, bool Validate, 
+							int m0, int m1, float *out) {
 				
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];
@@ -79,7 +81,7 @@ void ANNMavModel::ModelCart(int n, float *x, float *y, float *f107,
 }
 
 /***********************************************************************
- * NAME : void Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : void Model(n,mlt,R,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : Calculates the model at a number of positions in MLT 
  * 				and R.
@@ -88,6 +90,7 @@ void ANNMavModel::ModelCart(int n, float *x, float *y, float *f107,
  * 		int		n			The number of elements
  * 		float	*mlt		Magnetic local time
  * 		float 	*R			The radial distance (L-shell)
+ * 		float	*f107		The F10.7 index
  * 		bool	ShowDC		If true then the DC component will be included
  * 		bool	OnlyDC		If true ONLY the DC component will be included
  * 		bool	Validate	If true, then all elements will be checked
@@ -103,8 +106,9 @@ void ANNMavModel::ModelCart(int n, float *x, float *y, float *f107,
  * 
  * 
  * ********************************************************************/
-void ANNMavModel::Model(int n, float *mlt, float *R, float *f107, bool ShowDC, bool OnlyDC, 
-			bool Validate, int m0, int m1, float *out){
+void ANNMavModel::Model(int n, float *mlt, float *R, float *f107,
+						bool ShowDC, bool OnlyDC,bool Validate, 
+						int m0, int m1, float *out){
 	
 	/* create the arrays to store dc and periodic components of the model */
 	int i, j;

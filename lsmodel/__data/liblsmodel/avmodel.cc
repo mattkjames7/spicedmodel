@@ -1,60 +1,6 @@
 #include "avmodel.h"
 
 
-///***********************************************************************
- //* NAME : AvModel(ptr)
- //* 
- //* DESCRIPTION : Constructor of the AvModel object.
- //* 
- //* INPUTS : 
- //* 		unsigned char	*ptr	pointer to the area of memory where the
- //* 								parameters are stored.
- //* 
- //* ********************************************************************/
-//AvModel::AvModel(unsigned char *ptr) {
-	
-	///* all we need to do is initialize the object by reading in the 
-	 //* model parameters from the provided memor address */
-	//ReadModelParams(ptr);
-	
-	///* we could also do with storing the m-numbers and equivalent
-	 //* wave lengths */
-	//nm_ = min(Rshape_[0],Ishape_[0]);
-	//int i;
-	//m_ = new int[nm_];
-	//wl_ = new float[nm_];
-	//for (i=1;i<=nm_;i++) {
-		//m_[i] = i;
-		//wl_[i] = 1.0/((float) i);
-	//}
-//}
-
-///***********************************************************************
- //* NAME : ~AvModel()
- //* 
- //* DESCRIPTION :Destructor for the AvModel object
- //* 
- //* 
- //* ********************************************************************/
-//AvModel::~AvModel() {
-	
-	///* here we need to free up the model parameters */
-	//int i;
-	//delete dc_;
-	//for (i=0;i<Rshape_[0];i++) {
-		//delete R_[i];
-	//}
-	//delete[] R_;
-	//for (i=0;i<Ishape_[0];i++) {
-		//delete I_[i];
-	//}
-	//delete[] I_;
-	
-	///* and the m-numbers */
-	//delete m_;
-	//delete wl_;
-	
-//}
 
 /***********************************************************************
  * NAME : void ReadModelParams(ptr)

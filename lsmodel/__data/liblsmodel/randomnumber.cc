@@ -7,7 +7,6 @@
  * 
  * ********************************************************************/
 void SeedRandom() {
-	//seed the random number generator
 	srand((unsigned) time(NULL));
 }	
 
@@ -25,10 +24,6 @@ void SeedRandom() {
  * 
  * ********************************************************************/
 int RandomNumber(int *Range) {
-	//seed the random number generator
-	//srand((unsigned) time(NULL));
-	
-	//now fill each array
 	return (int) round((Range[1]-Range[0])*(((float) rand()) / ((float) RAND_MAX))) + Range[0];
 }
 
@@ -46,10 +41,6 @@ int RandomNumber(int *Range) {
  * 
  * ********************************************************************/
 int RandomNumber(int R0, int R1) {
-	//seed the random number generator
-	//srand((unsigned) time(NULL));
-	
-	//now fill each array
 	return (int) round((R1-R0)*(((float) rand()) / ((float) RAND_MAX))) + R0;
 }
 
@@ -67,10 +58,6 @@ int RandomNumber(int R0, int R1) {
  * 
  * ********************************************************************/
 float RandomNumber(float *Range) {
-	//seed the random number generator
-	//srand((unsigned) time(NULL));
-	
-	//now fill each array
 	return (Range[1]-Range[0])*(((float) rand()) / ((float) RAND_MAX)) + Range[0];
 }
 
@@ -88,10 +75,6 @@ float RandomNumber(float *Range) {
  * 
  * ********************************************************************/
 float RandomNumber(float R0, float R1) {
-	//seed the random number generator
-	//srand((unsigned) time(NULL));
-	
-	//now fill each array
 	return (R1-R0)*(((float) rand()) / ((float) RAND_MAX)) + R0;
 }
 

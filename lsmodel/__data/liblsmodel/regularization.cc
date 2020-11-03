@@ -65,7 +65,20 @@ float L2Regularization(MatrixArray &w, float L2, int m) {
 	return L2*J/((float) m*2.0);
 }
 
-
+/***********************************************************************
+ * NAME : 	ApplyRegGradToMatrix(w,wGrad,L1,L2,m)
+ * 
+ * DESCRIPTION : Applies regularization to weight gradient matrix.
+ * 
+ * INPUTS : 
+ * 		MatrixArray	&w		The weight matrices.
+ * 		MatrixArray	&wGrad	The gradients of the weights from the 
+ * 							back-propagation algorithm.
+ * 		double		L1		L1 regularization parameter.
+ * 		double		L2		L2 regularization parameter.
+ * 		int			m		The number of samples.
+ * 
+ * ********************************************************************/
 void ApplyRegGradToMatrix(MatrixArray &w, MatrixArray &wGrad,double L1, double L2, int m) {
 	
 	int nA = w.n;

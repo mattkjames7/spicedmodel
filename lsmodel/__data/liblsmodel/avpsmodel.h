@@ -7,6 +7,15 @@
 #include "boxcox.h"
 #include "polynomial.h"
 #include "reversearray.h"
+
+/***********************************************************************
+ * NAME : 	class AvPSModel
+ * 
+ * DESCRIPTION : This class object is based upon the AvModel object and
+ * 				will store the plasmasphere density model parameters. 
+ * 				Its member functions can be used to access the model.
+ * 
+ * ********************************************************************/
 class AvPSModel: public AvModel {
 	public:
 		/* model constructor */
