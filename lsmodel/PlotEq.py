@@ -8,6 +8,7 @@ from .PS import PS
 from .PT import PT
 from .Density import Density
 from .PMD import PMD
+from .PlotPlanet import PlotPlanet
 
 #default plotting parameters for each plot type (function,colormap,scale,zlog,zlabel)
 defargs = { 'prob' 		: (Prob,'seismic',[0.0,1.0],False,'$P(PS)$'),
@@ -151,6 +152,9 @@ def PlotEq(ptype,F107=None,SMR=None,ShowDC=True,OnlyDC=False,Validate=True,
 	#set axis titles
 	ax.set_ylabel('$x_{SM}$ ($R_E$)')
 	ax.set_xlabel('$y_{SM}$ ($R_E$)')	
+	
+	#add in the Earth
+	PlotPlanet(ax)
 
 	if ColorBar:
 		divider = make_axes_locatable(ax)
