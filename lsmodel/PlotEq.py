@@ -23,6 +23,69 @@ def PlotEq(ptype,F107=None,SMR=None,ShowDC=True,OnlyDC=False,Validate=True,
 	'''
 	Plot one of the models in the equatorial plane
 	
+	======
+	ptype : str
+		This will determine which model to plot: 'prob'|'ps'|'pt'|'mav'|
+		'density'|'pmd'. 
+	F107 : float | None
+		Set to None for the average model, or a float (scalar or array 
+		with the same shape as x and y) for the model which is scaled by
+		the f10.7 index.
+	SMR : float | None
+		Set to None for the average model, or a float (scalar or array 
+		with the same shape as x and y) for the model which is scaled by
+		the SMR index.
+	Coord : str
+		'xy'|'ml' - Denotes the input coordinates provided by the inputs
+		x and y, where Coord='xy' corresponds to the x and y SM 
+		coordinates and Coord='ml' means that x and y represent MLT (in
+		hours) and L-shell (in R_e), respectively.
+	ShowDC : bool
+		If True (default) then the DC component is included in the model 
+		output, otherwise the output just contains the periodic 
+		components of the model.
+	OnlyDC : bool
+		If True (default = False) then the periodic components are 
+		ignored and only the DC component is returned.
+	Validate : bool
+		If True (default) then the positions are checked for validity 
+		(2 <= L <= 5.9), where invalid ones are set to NaN.
+	m : int
+		This should be a 2-element list/tuple/array which contains the
+		lowest and highest m-numbers to include in the output (default =
+		[1,3]).
+	fig : None | object
+		If fig=None - a new plot window is created.
+		If fig=matplotlib.pyplot - the current plot window is used, new
+		subplot is created.
+		If fig=matplotlib.pyplot.Axes instance - the current set of axes
+		is used.
+	maps : array-like
+		This should be a 4-element list/tuple/array of integers where 
+		maps=[xmaps,ymaps,xmap,ymap] and:
+		xmaps : number of subplots in the horizontal direction
+		ymaps : number of subplots in the vertical direction
+		xmap : position of the current plot horizontally, starting
+			at 0 (from the left)
+		ymap : position of the current plot vertically, starting at 0
+			(from the top)
+	rowspan : number of rows of subplots to occupy with this plot.
+	colspan : number of columns of subplots to occupy with this plot.
+	zlog : None | bool
+		Sets the color bar to a log-scale if True. If None, the default 
+		for the plot type is used.
+	scale : None | array-like
+		If set to a 2-element array, this sets the limits of the color 
+		scale. If set to None then the default is used.
+	cmap : None | str
+		Set to the name of a matplotlib color scale.
+	ColorBar : bool
+		If True, then display a color bar next to the subplot.
+		
+	Returns
+	=======
+	ax : matplotlib.pyplot.Axes
+		The instance of the current set of plot axes.
 	'''
 	
 	#get the default args

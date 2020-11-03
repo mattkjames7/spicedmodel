@@ -7,6 +7,43 @@ def PT(x,y,SMR=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3],Re
 	Get the plasma trough electron density model output 
 	for a given set of input coordinates.
 	
+	Inputs
+	======
+	x : float
+		Array or scalar coordinate (see Coord for more info).
+	y : float
+		Array or scalar coordinate (see Coord for more info).
+	SMR : float | None
+		Set to None for the average model, or a float (scalar or array 
+		with the same shape as x and y) for the model which is scaled by
+		the SMR index.
+	Coord : str
+		'xy'|'ml' - Denotes the input coordinates provided by the inputs
+		x and y, where Coord='xy' corresponds to the x and y SM 
+		coordinates and Coord='ml' means that x and y represent MLT (in
+		hours) and L-shell (in R_e), respectively.
+	ShowDC : bool
+		If True (default) then the DC component is included in the model 
+		output, otherwise the output just contains the periodic 
+		components of the model.
+	OnlyDC : bool
+		If True (default = False) then the periodic components are 
+		ignored and only the DC component is returned.
+	Validate : bool
+		If True (default) then the positions are checked for validity 
+		(2 <= L <= 5.9), where invalid ones are set to NaN.
+	m : int
+		This should be a 2-element list/tuple/array which contains the
+		lowest and highest m-numbers to include in the output (default =
+		[1,3]).
+	RevTrans : bool
+		If True (default) this will reverse the Box-Cox transform of the 
+		electron densities back to physical units.
+		
+	Returns
+	=======
+	out : float
+		Array of electron densities (cm^-3).
 	'''
 	
 	#get the number of elements first
