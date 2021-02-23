@@ -20,7 +20,8 @@ defargs = { 'prob' 		: (Prob,'seismic',[0.0,1.0],False,'$P(PS)$'),
 			
 def PlotEq(ptype,F107=None,SMR=None,ShowDC=True,OnlyDC=False,Validate=True,
 			m=[1,3],fig=None,maps=[1,1,0,0],rowspan=1,colspan=1,zlog=None,
-			scale=None,cmap=None,ColorBar=True,):
+			scale=None,cmap=None,ColorBar=True,NoonTop=True,xrnge=[-6.0,6.0],
+			yrnge=[-6.0,6.0],dx=0.1,dy=0.1):
 	'''
 	Plot one of the models in the equatorial plane
 	
@@ -94,10 +95,8 @@ def PlotEq(ptype,F107=None,SMR=None,ShowDC=True,OnlyDC=False,Validate=True,
 	
 
 	#create a grid
-	nx = 120
-	ny = 120
-	xrnge = [-6.0,6.0]
-	yrnge = [-6.0,6.0]
+	nx = np.int32(np.round((xrnge[1]-xrnge[0])/dx))
+	ny = np.int32(np.round((yrnge[1]-yrnge[0])/dy))
 	xe = np.linspace(xrnge[0],xrnge[1],nx+1)
 	ye = np.linspace(yrnge[0],yrnge[1],ny+1)
 	
@@ -142,19 +141,32 @@ def PlotEq(ptype,F107=None,SMR=None,ShowDC=True,OnlyDC=False,Validate=True,
 	else:
 		ax = fig
 		
-	sm = ax.pcolormesh(xem,yem,grid.T,cmap=cmap,norm=norm)
+	if NoonTop:
+		sm = ax.pcolormesh(xem,yem,grid.T,cmap=cmap,norm=norm)
+	else:
+		sm = ax.pcolormesh(yem.T,xem.T,grid,cmap=cmap,norm=norm)
 
-	#set the axis limits
-	ax.set_ylim(xrnge)
-	ax.set_xlim(yrnge[::-1])
 	ax.set_aspect(1.0)
 
-	#set axis titles
-	ax.set_ylabel('$x_{SM}$ ($R_E$)')
-	ax.set_xlabel('$y_{SM}$ ($R_E$)')	
+	if NoonTop:
+		#set the axis limits
+		ax.set_ylim(xrnge)
+		ax.set_xlim(yrnge[::-1])
+
+		#set axis titles
+		ax.set_ylabel('$x_{SM}$ ($R_E$)')
+		ax.set_xlabel('$y_{SM}$ ($R_E$)')	
+	else:
+		#set the axis limits
+		ax.set_xlim(xrnge)
+		ax.set_ylim(yrnge)
+
+		#set axis titles
+		ax.set_xlabel('$x_{SM}$ ($R_E$)')
+		ax.set_ylabel('$y_{SM}$ ($R_E$)')	
 	
 	#add in the Earth
-	PlotPlanet(ax)
+	PlotPlanet(ax,NoonTop=NoonTop)
 
 	if ColorBar:
 		divider = make_axes_locatable(ax)
@@ -162,5 +174,16 @@ def PlotEq(ptype,F107=None,SMR=None,ShowDC=True,OnlyDC=False,Validate=True,
 
 		cbar = plt.colorbar(sm,cax=cax) 
 		cbar.set_label(zlabel)
+		
+	#add title
+	title = []
+	if not SMR is None:
+		title.append('SMR={:5.1f} nT'.format(SMR))
+	if not F107 is None:
+		title.append('F10.7={:5.1f} sfu'.format(F107))
+	
+	if len(title) > 0:
+		title = '  '.join(title)
+		ax.set_title(title)
 	
 	return ax
