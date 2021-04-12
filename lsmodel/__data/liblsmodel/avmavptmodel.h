@@ -1,5 +1,5 @@
-#ifndef __AVMAVMODEL_H__
-#define __AVMAVMODEL_H__
+#ifndef __AVMAVPTMODEL_H__
+#define __AVMAVPTMODEL_H__
 #include <stdio.h>
 #include <stdlib.h>
 #include "avmodel.h"

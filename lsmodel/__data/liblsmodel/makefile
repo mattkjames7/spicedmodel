@@ -30,7 +30,9 @@ obj:
 	#source code
 	$(CCo) activationfunctions.cc -o activationfunctions.o
 	$(CCo) annmodel.cc -o annmodel.o
-	$(CCo) annmavmodel.cc -o annmavmodel.o
+	$(CCo) annmavhmodel.cc -o annmavhmodel.o
+	$(CCo) annmavpsmodel.cc -o annmavpsmodel.o
+	$(CCo) annmavptmodel.cc -o annmavptmodel.o
 	$(CCo) annprobmodel.cc -o annprobmodel.o
 	$(CCo) annpsmodel.cc -o annpsmodel.o
 	$(CCo) annptmodel.cc -o annptmodel.o

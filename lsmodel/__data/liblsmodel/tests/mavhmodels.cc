@@ -1,6 +1,6 @@
-#include "mavmodels.h"
+#include "mavhmodels.h"
 
-void testMavModels() {
+void testMavHModels() {
 
 	/* create some test values */
 	float R[] = {1.0,1.0,3.0,3.0,5.0,5.0,3.0,3.0,5.0,5.0};
@@ -13,7 +13,7 @@ void testMavModels() {
 	float out[10];
 
 	printf("***********Test Average Mav object*********************\n");
-	AvMavModel *av = new AvMavModel(&_binary_mav_bin_start);
+	AvMavHModel *av = new AvMavHModel(&_binary_mavh_bin_start);
 	
 	av->Model(10,M,R,true,false,true,1,3,out);
 	
@@ -29,7 +29,7 @@ void testMavModels() {
 
 	printf("***********Test Mav ANN object*********************\n");
 	/* create the ann model object */
-	ANNMavModel *ann = new ANNMavModel(&_binary_mavann_bin_start);
+	ANNMavHModel *ann = new ANNMavHModel(&_binary_mavhann_bin_start);
 	
 	ann->Model(10,M,R,f107,true,false,true,1,3,out);
 	

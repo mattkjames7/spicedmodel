@@ -1,44 +1,48 @@
-#include "annmavmodel.h"
+#include "annmavpsmodel.h"
 
 /***********************************************************************
- * NAME : ANNMavModel(ptr)
+ * NAME : ANNMavPSModel(ptr)
  * 
- * DESCRIPTION : Constructor of the ANNMavModel object.
+ * DESCRIPTION : Constructor of the ANNMavPSModel object.
  * 
  * INPUTS : 
  * 		unsigned char	*ptr	pointer to the area of memory where the
  * 								parameters are stored.
  * 
  * ********************************************************************/
-ANNMavModel::ANNMavModel(unsigned char *ptr) {
+ANNMavPSModel::ANNMavPSModel(unsigned char *ptr) {
 	
 	/* I think that we just need to read the model in and load the
 	 * ANNModel object */
 	LoadANN(ptr);
 	
 	
+	/* Finally store an object which can transform the mav values*/
+	MT_ = new MavTrans();	
+	
 }
 
 /***********************************************************************
- * NAME : ~ANNMavModel()
+ * NAME : ~ANNMavPSModel()
  * 
- * DESCRIPTION :Destructor for the ANNMavModel object
+ * DESCRIPTION :Destructor for the ANNMavPSModel object
  * 
  * 
  * ********************************************************************/
-ANNMavModel::~ANNMavModel() {
+ANNMavPSModel::~ANNMavPSModel() {
 	
 	/* here we need to free up the model parameters */
 	int i;
 	delete[] m_;
 	delete[] wl_;
 	delete ann_;
-	
+
+	delete MT_;	
 }
 
 
 /***********************************************************************
- * NAME : void ModelCart(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : void ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
  * 
  * DESCRIPTION : Calculates the model at a number of Cartesian x and y
  * 				positions.
@@ -47,7 +51,7 @@ ANNMavModel::~ANNMavModel() {
  * 		int		n			The number of elements
  * 		float	*x			SM x-coordinate
  * 		float 	*y			SM y-coordinate
- * 		float	*f107		The F10.7 index
+ * 		float	*smr		The SMR index
  * 		bool	ShowDC		If true then the DC component will be included
  * 		bool	OnlyDC		If true ONLY the DC component will be included
  * 		bool	Validate	If true, then all elements will be checked
@@ -57,15 +61,16 @@ ANNMavModel::~ANNMavModel() {
  * 							m_av range(1.0 to 16.0 amu)
  * 		int		m0			The starting m number to include
  * 		int		m1			The final m number to include
+ * 		bool	RevTrans	Reverse transform
  * 
  * OUTPUTS : 
  * 		float	*out		The model average ion mass
  * 
  * 
  * ********************************************************************/
-void ANNMavModel::ModelCart(int n, float *x, float *y, float *f107,
+void ANNMavPSModel::ModelCart(int n, float *x, float *y, float *smr,
 							bool ShowDC, bool OnlyDC, bool Validate, 
-							int m0, int m1, float *out) {
+							int m0, int m1, bool RevTrans, float *out) {
 				
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];
@@ -73,7 +78,7 @@ void ANNMavModel::ModelCart(int n, float *x, float *y, float *f107,
 	CartMLTR(n,x,y,mlt,R);
 	
 	/* call the model function */
-	Model(n,mlt,R,f107,ShowDC,OnlyDC,Validate,m0,m1,out);
+	Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out);
 		
 	/* clean up */
 	delete[] mlt;
@@ -81,7 +86,7 @@ void ANNMavModel::ModelCart(int n, float *x, float *y, float *f107,
 }
 
 /***********************************************************************
- * NAME : void Model(n,mlt,R,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : void Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
  * 
  * DESCRIPTION : Calculates the model at a number of positions in MLT 
  * 				and R.
@@ -90,7 +95,7 @@ void ANNMavModel::ModelCart(int n, float *x, float *y, float *f107,
  * 		int		n			The number of elements
  * 		float	*mlt		Magnetic local time
  * 		float 	*R			The radial distance (L-shell)
- * 		float	*f107		The F10.7 index
+ * 		float	*smr		The SMR index
  * 		bool	ShowDC		If true then the DC component will be included
  * 		bool	OnlyDC		If true ONLY the DC component will be included
  * 		bool	Validate	If true, then all elements will be checked
@@ -106,9 +111,9 @@ void ANNMavModel::ModelCart(int n, float *x, float *y, float *f107,
  * 
  * 
  * ********************************************************************/
-void ANNMavModel::Model(int n, float *mlt, float *R, float *f107,
+void ANNMavPSModel::Model(int n, float *mlt, float *R, float *smr,
 						bool ShowDC, bool OnlyDC,bool Validate, 
-						int m0, int m1, float *out){
+						int m0, int m1, bool RevTrans, float *out){
 	
 	/* create the arrays to store dc and periodic components of the model */
 	int i, j;
@@ -119,25 +124,17 @@ void ANNMavModel::Model(int n, float *mlt, float *R, float *f107,
 	}
 	
 	/* rescale F10.7 */
-	float *f107s =  new float[n];
+	float *smrs =  new float[n];
 	for (i=0;i<n;i++) {
-		f107s[i] = rescaleF107(f107[i]);
+		smrs[i] = rescaleSMR(smr[i]);
 	}
 	
 	/* now let's get the model components */
-	ModelComponents(n,mlt,R,f107s,dc,per);
+	ModelComponents(n,mlt,R,smrs,dc,per);
 
-	/* Add the DC component if we are including this in the output */
-	if (OnlyDC || ShowDC) {
-		/* add the DC component */
-		for (i=0;i<n;i++) {
-			out[i] = dc[i];
-		}
-	} else { 
-		/* fill with zeros */
-		for (i=0;i<n;i++) {
-			out[i] = 0.0;
-		}
+	/* add the DC component */
+	for (i=0;i<n;i++) {
+		out[i] = dc[i];
 	}
 
 	/* if we are not just returning the DC component, we need to think 
@@ -156,16 +153,29 @@ void ANNMavModel::Model(int n, float *mlt, float *R, float *f107,
 		}
 	}
 
+	/*reverse transform*/
+	if (RevTrans) {
+		MT_->PSRevTransform(n,R,out,out);
+		MT_->PSRevTransform(n,R,dc,dc);
+	}
+
+	/* remove the DC component if we need to */
+	if ((!OnlyDC) && (!ShowDC)) {
+		for (i=0;i<n;i++) {
+			out[i] = out[i] - dc[i];
+		}
+	}
+	
 	/* make sure that we remove anything invalid*/
 	if (Validate) {
 		for (i=0;i<n;i++) {
 			if ((R[i] > 5.9) || (R[i] < 2.0)) {
 				/* outside of the model L-shell range */
 				out[i] = NAN;
-			} else if ((out[i] > 16.0) && (ShowDC)) {
+			} else if ((out[i] > 16.0) && (ShowDC) && (RevTrans)) {
 				/* shouldn't be more than 16.0 */
 				out[i] = 16.0;
-			} else if ((out[i] < 1.0) && (ShowDC)) {
+			} else if ((out[i] < 1.0) && (ShowDC) && (RevTrans)) {
 				/* not physically possible to be below 1.0 */
 				out[i] = 1.0;
 			}
@@ -178,7 +188,7 @@ void ANNMavModel::Model(int n, float *mlt, float *R, float *f107,
 		delete[] per[i];
 	}
 	delete[] per;
-	delete [] f107s;
+	delete [] smrs;
 		
 }
 

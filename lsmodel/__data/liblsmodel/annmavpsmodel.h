@@ -1,29 +1,34 @@
-#ifndef __ANNMAVMODEL_H__
-#define __ANNMAVMODEL_H__
+#ifndef __ANNMAVPSMODEL_H__
+#define __ANNMAVPSMODEL_H__
 #include <stdio.h>
 #include <stdlib.h>
 #include "annmodel.h"
 using namespace std;
 
 /***********************************************************************
- * NAME : 	class ANNMavModel
+ * NAME : 	class ANNMavPSModel
  * 
  * DESCRIPTION : This class object is based upon the ANNModel object and
  * 				will store the average ion mass neural network. Its 
  * 				member functions can be used to access the model.
  * 
+ * 				This is the cold ion plasmsphere model!
+ * 
  * ********************************************************************/
-class ANNMavModel: public ANNModel {
+class ANNMavPSModel: public ANNModel {
 	public:
 		/* constructor for the model object */
-		ANNMavModel(unsigned char *);
+		ANNMavPSModel(unsigned char *);
 		
 		/* destructor for the model object */
-		~ANNMavModel();
+		~ANNMavPSModel();
 		
 		/* the full model - this ought to be used by default */
-		void Model(int,float*,float*,float*,bool,bool,bool,int,int,float*);
-		void ModelCart(int,float*,float*,float*,bool,bool,bool,int,int,float*);	
+		void Model(int,float*,float*,float*,bool,bool,bool,int,int,bool,float*);
+		void ModelCart(int,float*,float*,float*,bool,bool,bool,int,int,bool,float*);	
+
+	private:
+		MavTrans *MT_;
 };
 
 #endif

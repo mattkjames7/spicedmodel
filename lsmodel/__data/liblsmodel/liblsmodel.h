@@ -6,7 +6,9 @@
 #include "avmavhmodel.h"
 #include "avmavpsmodel.h"
 #include "avmavptmodel.h"
-#include "annmavmodel.h"
+#include "annmavhmodel.h"
+#include "annmavpsmodel.h"
+#include "annmavptmodel.h"
 #include "avprobmodel.h"
 #include "annprobmodel.h"
 #include "avpsmodel.h"
@@ -41,6 +43,8 @@ AvPSModel *gAvPS = NULL;
 AvPTModel *gAvPT = NULL;
 
 ANNMavHModel *gAnnMavH = NULL;
+ANNMavPSModel *gAnnMavPS = NULL;
+ANNMavPTModel *gAnnMavPT = NULL;
 ANNProbModel *gAnnProb = NULL;
 ANNPSModel *gAnnPS = NULL;
 ANNPTModel *gAnnPT = NULL;
@@ -61,7 +65,7 @@ extern "C" {
  * NAME : 	void getAvMavH(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
- * 		Calculates the average ion mass model.
+ * 		Calculates the hot average ion mass model.
  * 
  * INPUTS : 
  * 		int		n			Number of points to evaluate model at.
@@ -82,12 +86,11 @@ extern "C" {
 	void getAvMavH(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, float *out);
 
-
 /***********************************************************************
  * NAME : 	void getAvMavHCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
- * 		Calculates the average ion mass model.
+ * 		Calculates the hot average ion mass model.
  * 
  * INPUTS : 
  * 		int		n			Number of points to evaluate model at.
@@ -107,12 +110,13 @@ extern "C" {
  * ********************************************************************/
 	void getAvMavHCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, float *out);
-
+				
+				
 /***********************************************************************
  * NAME : 	void getScaledMavH(n,mlt,R,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
- * 		Calculates the scaled average ion mass model.
+ * 		Calculates the scaled hot average ion mass model.
  * 
  * INPUTS : 
  * 		int		n			Number of points to evaluate model at.
@@ -133,12 +137,13 @@ extern "C" {
  * ********************************************************************/
 	void getScaledMavH(int n, float *mlt, float *R, float *f107, bool ShowDC, 
 				bool OnlyDC, bool Validate, int m0, int m1, float *out);
-				
+
+
 /***********************************************************************
  * NAME : 	void getScaledMavHCart(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
- * 		Calculates the scaled average ion mass model.
+ * 		Calculates the scaled hot average ion mass model.
  * 
  * INPUTS : 
  * 		int		n			Number of points to evaluate model at.
@@ -159,6 +164,222 @@ extern "C" {
  * ********************************************************************/
 	void getScaledMavHCart(int n, float *x, float *y, float *f107, bool ShowDC,
 				bool OnlyDC,bool Validate, int m0, int m1, float *out);
+
+/***********************************************************************
+ * NAME : 	void getAvMavPT(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the PT average ion mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 		bool	RevTrans	Reverse transform
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+	void getAvMavPT(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
+				bool Validate, int m0, int m1, bool RevTrans, float *out);
+
+/***********************************************************************
+ * NAME : 	void getAvMavPTCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the PT average ion mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 		bool	RevTrans	Reverse transform
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+	void getAvMavPTCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
+				bool Validate, int m0, int m1, bool RevTrans, float *out);
+
+/***********************************************************************
+ * NAME : 	void getScaledMavPT(n,mlt,R,f107,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled PT average ion mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		float 	*smr		Array of SMR indices
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 		bool	RevTrans	Reverse transform
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+	void getScaledMavPT(int n, float *mlt, float *R, float *smr, bool ShowDC, 
+				bool OnlyDC, bool Validate, int m0, int m1, bool RevTrans, float *out);
+
+
+/***********************************************************************
+ * NAME : 	void getScaledMavPTCart(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled PT average ion mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		float 	*smr		Array of SMR indices
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 		bool	RevTrans	Reverse transform
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+	void getScaledMavPTCart(int n, float *x, float *y, float *smr, bool ShowDC,
+				bool OnlyDC,bool Validate, int m0, int m1, bool RevTrans, float *out);
+
+/***********************************************************************
+ * NAME : 	void getAvMavPS(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the PS average ion mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 		bool	RevTrans	Reverse transform
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+	void getAvMavPS(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
+				bool Validate, int m0, int m1, bool RevTrans, float *out);
+
+
+/***********************************************************************
+ * NAME : 	void getAvMavPSCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the PS average ion mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 		bool	RevTrans	Reverse transform
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+	void getAvMavPSCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
+				bool Validate, int m0, int m1, bool RevTrans, float *out);
+
+/***********************************************************************
+ * NAME : 	void getScaledMav(n,mlt,R,f107,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled PS average ion mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		float 	*smr		Array of SMR indices
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 		bool	RevTrans	Reverse transform
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+	void getScaledMavPS(int n, float *mlt, float *R, float *smr, bool ShowDC, 
+				bool OnlyDC, bool Validate, int m0, int m1, bool RevTrans, float *out);
+
+
+/***********************************************************************
+ * NAME : 	void getScaledMavPSCart(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled PS average ion mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		float 	*smr		Array of SMR indices
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 		bool	RevTrans	Reverse transform
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+	void getScaledMavPSCart(int n, float *x, float *y, float *smr, bool ShowDC,
+				bool OnlyDC,bool Validate, int m0, int m1, bool RevTrans, float *out);
+
 
 /***********************************************************************
  * NAME : 	void getAvProb(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
