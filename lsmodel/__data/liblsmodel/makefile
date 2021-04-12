@@ -17,7 +17,9 @@ obj:
 	ld -r -b binary -o prob.o prob.bin
 
 	#these files contain the ANN weights, biases etc.
-	ld -r -b binary -o mavann.o mavann.bin 
+	ld -r -b binary -o mavhann.o mavhann.bin 
+	ld -r -b binary -o mavcpsann.o mavcpsann.bin 
+	ld -r -b binary -o mavcptann.o mavcptann.bin 
 	ld -r -b binary -o psann.o psann.bin 
 	ld -r -b binary -o ptann.o ptann.bin 
 	ld -r -b binary -o probann.o probann.bin 
