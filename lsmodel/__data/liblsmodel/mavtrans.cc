@@ -30,29 +30,25 @@ MavTrans::~MavTrans() {
  * DESCRIPTION : Read in the coefficients for the transform.
  * 
  * ********************************************************************/
-MavTrans::ReadCoefficients() {
+void MavTrans::ReadCoefficients() {
 	/* get a copy of the memory pointer*/
 	unsigned char *p = &_binary_mavlambda_bin_start;
-	
+
 	/*read in the PS first */
 	p = readArray(p,&ps_,&nps_);
-	
+
 	/*now read in the PT model */
 	p = readArray(p,&pt_,&npt_);
-	
+
 	/* reverse the elements of each array */
 	int i,j;
-	for (i=0;i<nps_[1];i++) {
-		reverseArray(nps_,ps_);
-	}
-	for (i=0;i<npt_[1];i++) {
-		reverseArray(npt_,pt_);
-	}
+	reverseArray(nps_,ps_);
+	reverseArray(npt_,pt_);
 	
 	/*adjust nps_ and npt_ such that they represent the degree of the
 	 * polynomials, rather than the number of coefficients */
-	nps--;
-	npt--;
+	nps_--;
+	npt_--;
 	
 	
 }
@@ -72,21 +68,22 @@ MavTrans::ReadCoefficients() {
  * 
  * 
  * ********************************************************************/
-MavTrans::PSTransform(int n, float *r, float *m, float *mt) {
+void MavTrans::PSTransform(int n, float *r, float *m, float *mt) {
 	
 	/*calculate lambda*/
-	float *lambda = new float[n];
+	double *lambda = new double[n];
 	polynomial(nps_,ps_,n,r,lambda);
 	
 	/*transform */
 	int i;
 	for (i=0;i<n;i++) {
-		if l(ambda[i] == 0) {
-			mt[i] = logf(m[i]);
+		if (lambda[i] == 0) {
+			mt[i] = (float) log((double) m[i]);
 		} else {
-			mt[i] = (powf(m[i],lambda[i]) - 1.0)/lambda[i];
+			mt[i] = (float) ((pow((double) m[i],lambda[i]) - 1.0)/lambda[i]);
 		}
 	}
+	delete lambda;
 }	
 
 /***********************************************************************
@@ -105,21 +102,22 @@ MavTrans::PSTransform(int n, float *r, float *m, float *mt) {
  * 
  * 
  * ********************************************************************/
-MavTrans::PSRevTransform(int n, float *r, float *m, float *mt) {
+void MavTrans::PSRevTransform(int n, float *r, float *mt, float *m) {
 	
 	/*calculate lambda*/
-	float *lambda = new float[n];
+	double *lambda = new double[n];
 	polynomial(nps_,ps_,n,r,lambda);
 	
 	/*transform */
 	int i;
 	for (i=0;i<n;i++) {
-		if l(ambda[i] == 0) {
-			mt[i] = logf(m[i]);
+		if (lambda[i] == 0) {
+			m[i] = (float) exp((double) mt[i]);
 		} else {
-			mt[i] = (powf(m[i],lambda[i]) - 1.0)/lambda[i];
+			m[i] = (float) pow((((double) mt[i])*lambda[i] + 1.0),1.0/lambda[i]);
 		}
 	}
+	delete lambda;
 }	
 
 /***********************************************************************
@@ -137,21 +135,22 @@ MavTrans::PSRevTransform(int n, float *r, float *m, float *mt) {
  * 
  * 
  * ********************************************************************/
-MavTrans::PTTransform(int n, float *r, float *m, float *mt) {
+void MavTrans::PTTransform(int n, float *r, float *m, float *mt) {
 	
 	/*calculate lambda*/
-	float *lambda = new float[n];
+	double *lambda = new double[n];
 	polynomial(npt_,pt_,n,r,lambda);
 	
 	/*transform */
 	int i;
 	for (i=0;i<n;i++) {
-		if l(ambda[i] == 0) {
-			mt[i] = logf(m[i]);
+		if (lambda[i] == 0) {
+			mt[i] = (float) log((double) m[i]);
 		} else {
-			mt[i] = (powf(m[i],lambda[i]) - 1.0)/lambda[i];
+			mt[i] = (float) ((pow((double) m[i],lambda[i]) - 1.0)/lambda[i]);
 		}
 	}
+	delete lambda;
 }	
 
 /***********************************************************************
@@ -170,21 +169,22 @@ MavTrans::PTTransform(int n, float *r, float *m, float *mt) {
  * 
  * 
  * ********************************************************************/
-MavTrans::PTRevTransform(int n, float *r, float *m, float *mt) {
+void MavTrans::PTRevTransform(int n, float *r, float *mt, float *m) {
 	
 	/*calculate lambda*/
-	float *lambda = new float[n];
+	double *lambda = new double[n];
 	polynomial(npt_,pt_,n,r,lambda);
 	
 	/*transform */
 	int i;
 	for (i=0;i<n;i++) {
-		if l(ambda[i] == 0) {
-			mt[i] = logf(m[i]);
+		if (lambda[i] == 0) {
+			m[i] = (float) exp((double) mt[i]);
 		} else {
-			mt[i] = (powf(m[i],lambda[i]) - 1.0)/lambda[i];
+			m[i] = (float) pow((((double) mt[i])*lambda[i] + 1.0),1.0/lambda[i]);
 		}
 	}
+	delete lambda;
 }	
 
 

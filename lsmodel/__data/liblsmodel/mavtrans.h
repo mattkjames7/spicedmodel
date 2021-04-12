@@ -33,7 +33,7 @@ class MavTrans {
 		int nps_,npt_;
 		
 		/* polynomial coefficients */
-		float *ps_, *pt_;
+		double *ps_, *pt_;
 };
 
 #endif

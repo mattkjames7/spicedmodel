@@ -17,3 +17,15 @@ using namespace std;
  * 
  * ********************************************************************/
 void reverseArray(int n, float *x);
+
+/***********************************************************************
+ * NAME	: 	void reverseArray(n,x)
+ * 
+ * DESCRIPTION : 	Reverses the elements of an array.
+ * 
+ * INPUTS : 
+ * 		int		n		The number of elements
+ * 		double 	*x		The array to be reversed
+ * 
+ * ********************************************************************/
+void reverseArray(int n, double *x);

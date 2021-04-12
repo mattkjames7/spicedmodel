@@ -8,6 +8,7 @@
 #include "tests/mavmodels.h"
 #include "tests/psmodels.h"
 #include "tests/ptmodels.h"
+#include "tests/testmavtrans.h"
 #endif
 using namespace std;
 extern unsigned char _binary_mav_bin_start;

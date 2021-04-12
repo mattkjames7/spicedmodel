@@ -99,6 +99,7 @@ void AvPSModel::DC(int n, float *R, float *dc) {
  * 							m_av range(1.0 to 16.0 amu)
  * 		int		m0			The starting m number to include
  * 		int		m1			The final m number to include
+ * 		bool	RevTrans	Reverse transform
  * 
  * OUTPUTS : 
  * 		float	*out		The model average ion mass
@@ -141,6 +142,7 @@ void AvPSModel::ModelCart(int n, float *x, float *y,
  * 							m_av range(1.0 to 16.0 amu)
  * 		int		m0			The starting m number to include
  * 		int		m1			The final m number to include
+ * 		bool	RevTrans	Reverse transform
  * 
  * OUTPUTS : 
  * 		float	*out		The model average ion mass

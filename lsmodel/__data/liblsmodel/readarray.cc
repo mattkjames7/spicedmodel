@@ -12,6 +12,50 @@
  * 		unsigned char	*p	Pointer to the memory address to start from
  * 		
  * OUTPUTS : 
+ * 		double 			*v 	This will contain the array of floats
+ * 		int				*n	The number of elements within v
+ * 
+ * RETURNS : 
+ * 		unsigned char	*p	New pointer address
+ *  
+ * ********************************************************************/
+unsigned char * readArray(unsigned char *p, double **v, int *n) {
+
+	/* start by reading the total size of the array */
+	n[0] = ((int*) p)[0];
+	p += sizeof(int);
+	
+	/* now read in the number of dimensions (only important for Python
+	 * here we assume that this is 1D */
+	int ns, shape;
+	ns = ((int*) p)[0];
+	shape = ((int*) p)[1];
+	p += 2*sizeof(int);
+	
+	/* let's initialize the output pointer */
+	*v = new double[n[0]];
+
+	/* read in the array */
+	int i;
+	for (i=0;i<n[0];i++) {
+		(*v)[i] = ((double*) p)[0];
+		p += sizeof(double);
+	}
+	
+	return p;
+	
+}
+
+/***********************************************************************
+ * NAME : 	unsigned char * readArray(p,v,n)
+ * 
+ * DESCRIPTION : Reads in a 1D floating point array from memory given a 
+ * 				pointer.
+ * 
+ * INPUTS : 
+ * 		unsigned char	*p	Pointer to the memory address to start from
+ * 		
+ * OUTPUTS : 
  * 		float 			*v 	This will contain the array of floats
  * 		int				*n	The number of elements within v
  * 

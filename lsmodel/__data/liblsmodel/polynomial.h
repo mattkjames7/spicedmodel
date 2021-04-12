@@ -13,6 +13,23 @@ using namespace std;
  * 
  * INPUTS : 
  * 		int		nd		The degree of the polynomial
+ * 		double	*coef	Coefficients, length = nd + 1
+ * 		int		n		Number of points to evaluate
+ * 		float 	*x		Array of points at which to calculate the 
+ * 						polynomial
+ * 
+ * OUTPUTS : 
+ * 		double	*y		Result 
+ * ********************************************************************/
+void polynomial(int nd, double *coef, int n, float *x, double *y);
+
+/***********************************************************************
+ * NAME : 	void polynomial(nd,coef,n,x,y)
+ * 
+ * DESCRIPTION : This function will calculate the result of a polynomial
+ * 
+ * INPUTS : 
+ * 		int		nd		The degree of the polynomial
  * 		float	*coef	Coefficients, length = nd + 1
  * 		int		n		Number of points to evaluate
  * 		float 	*x		Array of points at which to calculate the 

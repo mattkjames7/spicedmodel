@@ -1,17 +1,17 @@
-#include "avmavmodel.h"
+#include "avmavhmodel.h"
 
 
 /***********************************************************************
- * NAME : AvMavModel(ptr)
+ * NAME : AvMavHModel(ptr)
  * 
- * DESCRIPTION : Constructor of the AvMavModel object.
+ * DESCRIPTION : Constructor of the AvMavHModel object.
  * 
  * INPUTS : 
  * 		unsigned char	*ptr	pointer to the area of memory where the
  * 								parameters are stored.
  * 
  * ********************************************************************/
-AvMavModel::AvMavModel(unsigned char *ptr) {
+AvMavHModel::AvMavHModel(unsigned char *ptr) {
 	
 	/* all we need to do is initialize the object by reading in the 
 	 * model parameters from the provided memory address */
@@ -32,13 +32,13 @@ AvMavModel::AvMavModel(unsigned char *ptr) {
 }
 
 /***********************************************************************
- * NAME : ~AvMavModel()
+ * NAME : ~AvMavHModel()
  * 
- * DESCRIPTION :Destructor for the AvMavModel object
+ * DESCRIPTION :Destructor for the AvMavHModel object
  * 
  * 
  * ********************************************************************/
-AvMavModel::~AvMavModel() {
+AvMavHModel::~AvMavHModel() {
 	
 	/* here we need to free up the model parameters */
 	int i;
@@ -72,7 +72,7 @@ AvMavModel::~AvMavModel() {
  * 
  * 
  * ********************************************************************/
-void AvMavModel::DC(int n, float *R, float *dc) {
+void AvMavHModel::DC(int n, float *R, float *dc) {
 
 	int i;
 	for (i=0;i<n;i++) {
@@ -105,7 +105,7 @@ void AvMavModel::DC(int n, float *R, float *dc) {
  * 
  * 
  * ********************************************************************/
-void AvMavModel::ModelCart(int n, float *x, float *y, 
+void AvMavHModel::ModelCart(int n, float *x, float *y, 
 							bool ShowDC, bool OnlyDC, bool Validate, 
 							int m0, int m1, float *out) {
 				
@@ -147,7 +147,7 @@ void AvMavModel::ModelCart(int n, float *x, float *y,
  * 
  * 
  * ********************************************************************/
-void AvMavModel::Model(int n, float *mlt, float *R, 
+void AvMavHModel::Model(int n, float *mlt, float *R, 
 						bool ShowDC, bool OnlyDC, bool Validate, 
 						int m0, int m1, float *out){
 	
@@ -237,7 +237,7 @@ void AvMavModel::Model(int n, float *mlt, float *R,
  * 
  * 
  * ********************************************************************/
-void AvMavModel::ModelComponents(int n, float *mlt, float *R, 
+void AvMavHModel::ModelComponents(int n, float *mlt, float *R, 
 								float *dc, float **per) {
 
 	/* get the DC bit of the model */
@@ -267,7 +267,7 @@ void AvMavModel::ModelComponents(int n, float *mlt, float *R,
  * 
  * 
  * ********************************************************************/
-void AvMavModel::ModelComponentsCart(int n, float *x, float *y, 
+void AvMavHModel::ModelComponentsCart(int n, float *x, float *y, 
 									float *dc, float **per) {
 	
 	/* convert x and y to mlt and R */

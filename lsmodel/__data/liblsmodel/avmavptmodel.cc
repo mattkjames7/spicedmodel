@@ -29,6 +29,10 @@ AvMavPTModel::AvMavPTModel(unsigned char *ptr) {
 		m_[i-1] = i;
 		wl_[i-1] = ((float) i)/24.0;
 	}
+	
+	
+	/* Finally store an object which can transform the mav values*/
+	MT_ = new MavTrans();
 }
 
 /***********************************************************************
@@ -55,6 +59,8 @@ AvMavPTModel::~AvMavPTModel() {
 	/* and the m-numbers */
 	delete[] m_;
 	delete[] wl_;
+	
+	delete MT_;
 	
 }
 
@@ -99,6 +105,7 @@ void AvMavPTModel::DC(int n, float *R, float *dc) {
  * 							m_av range(1.0 to 16.0 amu)
  * 		int		m0			The starting m number to include
  * 		int		m1			The final m number to include
+ * 		bool	RevTrans	Reverse transform
  * 
  * OUTPUTS : 
  * 		float	*out		The model average ion mass
@@ -107,7 +114,7 @@ void AvMavPTModel::DC(int n, float *R, float *dc) {
  * ********************************************************************/
 void AvMavPTModel::ModelCart(int n, float *x, float *y, 
 							bool ShowDC, bool OnlyDC, bool Validate, 
-							int m0, int m1, float *out) {
+							int m0, int m1, bool RevTrans, float *out) {
 				
 	/* convert x and y to mlt and R */
 	float *mlt = new float[n];
@@ -115,7 +122,7 @@ void AvMavPTModel::ModelCart(int n, float *x, float *y,
 	CartMLTR(n,x,y,mlt,R);
 	
 	/* call the model function */
-	Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out);
+	Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out);
 		
 	/* clean up */
 	delete[] mlt;
@@ -141,6 +148,7 @@ void AvMavPTModel::ModelCart(int n, float *x, float *y,
  * 							m_av range(1.0 to 16.0 amu)
  * 		int		m0			The starting m number to include
  * 		int		m1			The final m number to include
+ * 		bool	RevTrans	Reverse transform
  * 
  * OUTPUTS : 
  * 		float	*out		The model average ion mass
@@ -149,7 +157,7 @@ void AvMavPTModel::ModelCart(int n, float *x, float *y,
  * ********************************************************************/
 void AvMavPTModel::Model(int n, float *mlt, float *R, 
 						bool ShowDC, bool OnlyDC, bool Validate, 
-						int m0, int m1, float *out){
+						int m0, int m1, bool RevTrans, float *out){
 	
 	/* create the arrays to store dc and periodic components of the model */
 	int i, j;
@@ -162,19 +170,11 @@ void AvMavPTModel::Model(int n, float *mlt, float *R,
 	/* now let's get the model components */
 	ModelComponents(n,mlt,R,dc,per);
 
-	/* Add the DC component if we are including this in the output */
-	if (OnlyDC || ShowDC) {
-		/* add the DC component */
-		for (i=0;i<n;i++) {
-			out[i] = dc[i];
-		}
-	} else { 
-		/* fill with zeros */
-		for (i=0;i<n;i++) {
-			out[i] = 0.0;
-		}
+	/* add the DC component */
+	for (i=0;i<n;i++) {
+		out[i] = dc[i];
 	}
-
+	
 	/* if we are not just returning the DC component, we need to think 
 	 * about the periodic bits of the model */
 	if (!OnlyDC) {
@@ -191,16 +191,29 @@ void AvMavPTModel::Model(int n, float *mlt, float *R,
 		}
 	}
 
+	/*reverse transform*/
+	if (RevTrans) {
+		MT_->PTRevTransform(n,R,out,out);
+		MT_->PTRevTransform(n,R,dc,dc);
+	}
+	
+	/* remove the DC component if we need to */
+	if ((!OnlyDC) && (!ShowDC)) {
+		for (i=0;i<n;i++) {
+			out[i] = out[i] - dc[i];
+		}
+	}
+
 	/* make sure that we remove anything invalid*/
 	if (Validate) {
 		for (i=0;i<n;i++) {
 			if ((R[i] > 5.9) || (R[i] < 2.0)) {
 				/* outside of the model L-shell range */
 				out[i] = NAN;
-			} else if ((out[i] > 16.0) && (ShowDC)) {
+			} else if ((out[i] > 16.0) && (ShowDC) && (RevTrans)) {
 				/* shouldn't be more than 16.0 */
 				out[i] = 16.0;
-			} else if ((out[i] < 1.0) && (ShowDC)) {
+			} else if ((out[i] < 1.0) && (ShowDC) && (RevTrans)) {
 				/* not physically possible to be below 1.0 */
 				out[i] = 1.0;
 			}

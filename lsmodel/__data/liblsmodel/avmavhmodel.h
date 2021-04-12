@@ -1,12 +1,12 @@
-#ifndef __AVMAVMODEL_H__
-#define __AVMAVMODEL_H__
+#ifndef __AVMAVHMODEL_H__
+#define __AVMAVHMODEL_H__
 #include <stdio.h>
 #include <stdlib.h>
 #include "avmodel.h"
 #include <algorithm>
 
 /***********************************************************************
- * NAME : 	class AvMavModel
+ * NAME : 	class AvMavHModel
  * 
  * DESCRIPTION : This class object is based upon the AvModel object and
  * 				will store the average ion mass model parameters. Its 
@@ -16,13 +16,13 @@
  * 				little resemblance to the cold composition.
  * 
  * ********************************************************************/
-class AvMavModel: public AvModel {
+class AvMavHModel: public AvModel {
 	public:
 		/* model constructor */
-		AvMavModel(unsigned char *);
+		AvMavHModel(unsigned char *);
 		
 		/* model destructor */
-		~AvMavModel();
+		~AvMavHModel();
 		
 		/* DC function */
 		void DC(int,float*,float*);

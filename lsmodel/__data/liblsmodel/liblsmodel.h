@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "avmavmodel.h"
+#include "avmavhmodel.h"
+#include "avmavpsmodel.h"
+#include "avmavptmodel.h"
 #include "annmavmodel.h"
 #include "avprobmodel.h"
 #include "annprobmodel.h"
@@ -15,7 +17,9 @@
 using namespace std;
 
 /* these are the memory addresses for the average model parameters */
-extern unsigned char _binary_mav_bin_start;
+extern unsigned char _binary_mavh_bin_start;
+extern unsigned char _binary_mavcps_bin_start;
+extern unsigned char _binary_mavcpt_bin_start;
 extern unsigned char _binary_prob_bin_start;
 extern unsigned char _binary_ps_bin_start;
 extern unsigned char _binary_pt_bin_start;
@@ -50,7 +54,7 @@ void initModels();
 
 extern "C" {
 /***********************************************************************
- * NAME : 	void getAvMav(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : 	void getAvMavH(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
  * 		Calculates the average ion mass model.
@@ -71,12 +75,12 @@ extern "C" {
  * 		float	*out		Output array.
  * 
  * ********************************************************************/
-	void getAvMav(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
+	void getAvMavH(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, float *out);
 
 
 /***********************************************************************
- * NAME : 	void getAvMavCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : 	void getAvMavHCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
  * 		Calculates the average ion mass model.
@@ -97,11 +101,11 @@ extern "C" {
  * 		float	*out		Output array.
  * 
  * ********************************************************************/
-	void getAvMavCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
+	void getAvMavHCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
 				bool Validate, int m0, int m1, float *out);
 
 /***********************************************************************
- * NAME : 	void getScaledMav(n,mlt,R,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : 	void getScaledMavH(n,mlt,R,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
  * 		Calculates the scaled average ion mass model.
@@ -123,11 +127,11 @@ extern "C" {
  * 		float	*out		Output array.
  * 
  * ********************************************************************/
-	void getScaledMav(int n, float *mlt, float *R, float *f107, bool ShowDC, 
+	void getScaledMavH(int n, float *mlt, float *R, float *f107, bool ShowDC, 
 				bool OnlyDC, bool Validate, int m0, int m1, float *out);
 				
 /***********************************************************************
- * NAME : 	void getScaledMavCart(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : 	void getScaledMavHCart(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
  * 		Calculates the scaled average ion mass model.
@@ -149,7 +153,7 @@ extern "C" {
  * 		float	*out		Output array.
  * 
  * ********************************************************************/
-	void getScaledMavCart(int n, float *x, float *y, float *f107, bool ShowDC,
+	void getScaledMavHCart(int n, float *x, float *y, float *f107, bool ShowDC,
 				bool OnlyDC,bool Validate, int m0, int m1, float *out);
 
 /***********************************************************************

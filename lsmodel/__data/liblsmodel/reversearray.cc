@@ -20,3 +20,23 @@ void reverseArray(int n, float *x) {
 		x[n-1-i] = tmp;
 	}
 }
+/***********************************************************************
+ * NAME	: 	void reverseArray(n,x)
+ * 
+ * DESCRIPTION : 	Reverses the elements of an array.
+ * 
+ * INPUTS : 
+ * 		int		n		The number of elements
+ * 		double 	*x		The array to be reversed
+ * 
+ * ********************************************************************/
+void reverseArray(int n, double *x) {
+	
+	double tmp;
+	int i;
+	for (i=0;i<n/2;i++) {
+		tmp = x[i];
+		x[i] = x[n-1-i];
+		x[n-1-i] = tmp;
+	}
+}

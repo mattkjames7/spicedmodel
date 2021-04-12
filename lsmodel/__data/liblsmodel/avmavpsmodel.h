@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "avmodel.h"
 #include <algorithm>
+#include "mavtrans.h"
 
 /***********************************************************************
  * NAME : 	class AvMavPSModel
@@ -31,8 +32,10 @@ class AvMavPSModel: public AvModel {
 		void ModelComponentsCart(int,float*,float*,float*,float**);
 		
 		/* The full model - use this by default */
-		void Model(int,float*,float*,bool,bool,bool,int,int,float*);
-		void ModelCart(int,float*,float*,bool,bool,bool,int,int,float*);
+		void Model(int,float*,float*,bool,bool,bool,int,int,bool,float*);
+		void ModelCart(int,float*,float*,bool,bool,bool,int,int,bool,float*);
+	private:
+		MavTrans *MT_;
 };
 
 
