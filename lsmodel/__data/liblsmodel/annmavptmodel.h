@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "annmodel.h"
+#include "mavtrans.h"
 using namespace std;
 
 /***********************************************************************

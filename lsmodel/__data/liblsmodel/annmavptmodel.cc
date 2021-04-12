@@ -155,8 +155,8 @@ void ANNMavPTModel::Model(int n, float *mlt, float *R, float *smr,
 
 	/*reverse transform*/
 	if (RevTrans) {
-		MT_->PSRevTransform(n,R,out,out);
-		MT_->PSRevTransform(n,R,dc,dc);
+		MT_->PTRevTransform(n,R,out,out);
+		MT_->PTRevTransform(n,R,dc,dc);
 	}
 
 	/* remove the DC component if we need to */

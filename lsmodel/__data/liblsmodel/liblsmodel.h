@@ -693,6 +693,113 @@ extern "C" {
 				bool OnlyDC,bool Validate, int m0, int m1, bool RevTrans, float *out);
 
 
+
+/***********************************************************************
+ * NAME : 	void getAvMav(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the combined plasmasphere/plasmatrough average ion 
+ * 		mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+void getAvMav(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
+				bool Validate, int m0, int m1, float *out);
+
+/***********************************************************************
+ * NAME : 	void getAvMavCart(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the combined plasmasphere/plasmatrough average ion 
+ * 		mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+void getAvMavCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
+				bool Validate, int m0, int m1, float *out);
+
+/***********************************************************************
+ * NAME : 	void getScaledMav(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmasphere/plasmatrough average ion mass
+ * 		model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+void getScaledMav(int n, float *mlt, float *R, float *smr, bool ShowDC,  
+				bool OnlyDC, bool Validate, int m0, int m1, float *out);
+
+/***********************************************************************
+ * NAME : 	void getScaledMavCart(n,x,y,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmasphere/plasmatrough average ion mass
+ * 		model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+void getScaledMavCart(int n, float *x, float *y, float *smr, bool ShowDC,  
+				bool OnlyDC, bool Validate, int m0, int m1, float *out);
+
 /***********************************************************************
  * NAME : 	void getAvDen(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
@@ -862,7 +969,6 @@ extern "C" {
  * 		int		n			Number of points to evaluate model at.
  * 		float	*mlt		Array of local times (in hours).
  * 		float 	*R			Array of L-shells (in R_E).
- * 		float 	*f107		Array of F10.7 indices.
  * 		float 	*smr		Array of SMR indices.
  * 		bool	ShowDC		If true, DC component included in output.
  * 		bool	OnlyDC		If true, only DC component is output.
@@ -876,7 +982,7 @@ extern "C" {
  * 		float	*out		Output array.
  * 
  * ********************************************************************/
-	void getScaledPMD(int n, float *mlt, float *R, float *f107, float *smr, bool ShowDC,  
+	void getScaledPMD(int n, float *mlt, float *R, float *smr, bool ShowDC,  
 				bool OnlyDC, bool Validate, int m0, int m1, float *out);
 
 /***********************************************************************
@@ -890,7 +996,6 @@ extern "C" {
  * 		int		n			Number of points to evaluate model at.
  * 		float	*x			Array of x-position (SM coords, in R_E).
  * 		float 	*y			Array of y-position (SM coords, in R_E).
- * 		float 	*f107		Array of F10.7 indices.
  * 		float 	*smr		Array of SMR indices.
  * 		bool	ShowDC		If true, DC component included in output.
  * 		bool	OnlyDC		If true, only DC component is output.
@@ -904,6 +1009,6 @@ extern "C" {
  * 		float	*out		Output array.
  * 
  * ********************************************************************/
-	void getScaledPMDCart(int n, float *x, float *y, float *f107, float *smr, bool ShowDC,  
+	void getScaledPMDCart(int n, float *x, float *y, float *smr, bool ShowDC,  
 				bool OnlyDC, bool Validate, int m0, int m1, float *out);
 }

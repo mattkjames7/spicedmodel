@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "avmodel.h"
 #include <algorithm>
+#include "mavtrans.h"
 
 /***********************************************************************
  * NAME : 	class AvMavPTModel

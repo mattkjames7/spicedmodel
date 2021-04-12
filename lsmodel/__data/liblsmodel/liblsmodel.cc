@@ -16,7 +16,7 @@ void initModels() {
 		gAvMavPS = new AvMavPSModel(&_binary_mavcps_bin_start);
 	}
 	if (gAvMavPT == NULL) {
-		gAvMavPt = new AvMavPTModel(&_binary_mavcpt_bin_start);
+		gAvMavPT = new AvMavPTModel(&_binary_mavcpt_bin_start);
 	}
 	if (gAvProb == NULL) {
 		gAvProb = new AvProbModel(&_binary_prob_bin_start);
@@ -882,6 +882,232 @@ void getScaledPTCart(int n, float *x, float *y, float *smr, bool ShowDC,
 
 
 /***********************************************************************
+ * NAME : 	void getAvMav(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the combined plasmasphere/plasmatrough average ion 
+ * 		mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+void getAvMav(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC, 
+				bool Validate, int m0, int m1, float *out) {
+	
+	/* check that the models have been loaded first */
+	initModels();
+	
+	/* create some temporary arrays */
+	float *prob = new float[n];
+	float *mavps = new float[n];
+	float *mavpt = new float[n];
+	
+	/* run the models */
+	gAvProb->Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,prob);
+	gAvMavPS->Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,true,mavps);
+	gAvMavPT->Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,true,mavpt);
+	
+	/* select the appropriate densities base upon prob */
+	int i;
+	for (i=0;i<n;i++) {
+		if (prob[i] >= 0.5) {
+			out[i] = mavps[i];
+		} else { 
+			out[i] = mavpt[i];
+		}
+	}
+	
+	/* delete temporary arrays */
+	delete prob;
+	delete mavps;
+	delete mavpt;
+	
+}
+
+/***********************************************************************
+ * NAME : 	void getAvMavCart(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the combined plasmasphere/plasmatrough average ion 
+ * 		mass model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+void getAvMavCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC, 
+				bool Validate, int m0, int m1, float *out) {
+	
+	/* check that the models have been loaded first */
+	initModels();
+	
+	/* create some temporary arrays */
+	float *prob = new float[n];
+	float *mavps = new float[n];
+	float *mavpt = new float[n];
+	
+	/* run the models */
+	gAvProb->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,prob);
+	gAvMavPS->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,true,mavps);
+	gAvMavPT->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,true,mavpt);
+	
+	/* select the appropriate densities base upon prob */
+	int i;
+	for (i=0;i<n;i++) {
+		if (prob[i] >= 0.5) {
+			out[i] = mavps[i];
+		} else { 
+			out[i] = mavpt[i];
+		}
+	}
+	
+	/* delete temporary arrays */
+	delete prob;
+	delete mavps;
+	delete mavpt;
+	
+}
+
+/***********************************************************************
+ * NAME : 	void getScaledMav(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmasphere/plasmatrough average ion mass
+ * 		model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*mlt		Array of local times (in hours).
+ * 		float 	*R			Array of L-shells (in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+void getScaledMav(int n, float *mlt, float *R, float *smr, bool ShowDC,  
+				bool OnlyDC, bool Validate, int m0, int m1, float *out) {
+	
+	/* check that the models have been loaded first */
+	initModels();
+	
+	/* create some temporary arrays */
+	float *prob = new float[n];
+	float *mavps = new float[n];
+	float *mavpt = new float[n];
+	
+	/* run the models */
+	gAnnProb->Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,prob);
+	gAnnMavPS->Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,true,mavps);
+	gAnnMavPT->Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,true,mavpt);
+	
+	/* select the appropriate densities base upon prob */
+	int i;
+	for (i=0;i<n;i++) {
+		if (prob[i] >= 0.5) {
+			out[i] = mavps[i];
+		} else { 
+			out[i] = mavpt[i];
+		}
+	}
+	
+	/* delete temporary arrays */
+	delete prob;
+	delete mavps;
+	delete mavpt;
+	
+}
+
+/***********************************************************************
+ * NAME : 	void getScaledMavCart(n,x,y,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * 
+ * DESCRIPTION : 
+ * 		Calculates the scaled plasmasphere/plasmatrough average ion mass
+ * 		model.
+ * 
+ * INPUTS : 
+ * 		int		n			Number of points to evaluate model at.
+ * 		float	*x			Array of x-position (SM coords, in R_E).
+ * 		float 	*y			Array of y-position (SM coords, in R_E).
+ * 		float 	*smr		Array of SMR indices.
+ * 		bool	ShowDC		If true, DC component included in output.
+ * 		bool	OnlyDC		If true, only DC component is output.
+ * 		bool	Validate	If true, all points will be checked to see
+ * 							that they fit within the model parameters,
+ * 							anything outside will be NAN.
+ * 		int		m0			First azimuthal wave number to include.
+ * 		int 	m1			Last azimuthal wave number to include.
+ * 
+ * OUTPUTS :
+ * 		float	*out		Output array.
+ * 
+ * ********************************************************************/
+void getScaledMavCart(int n, float *x, float *y, float *smr, bool ShowDC,  
+				bool OnlyDC, bool Validate, int m0, int m1, float *out) {
+	
+	/* check that the models have been loaded first */
+	initModels();
+	
+	/* create some temporary arrays */
+	float *prob = new float[n];
+	float *mavps = new float[n];
+	float *mavpt = new float[n];
+	
+	/* run the models */
+	gAnnProb->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,prob);
+	gAnnMavPS->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,true,mavps);
+	gAnnMavPT->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,true,mavpt);
+	
+	/* select the appropriate densities base upon prob */
+	int i;
+	for (i=0;i<n;i++) {
+		if (prob[i] >= 0.5) {
+			out[i] = mavps[i];
+		} else { 
+			out[i] = mavpt[i];
+		}
+	}
+	
+	/* delete temporary arrays */
+	delete prob;
+	delete mavps;
+	delete mavpt;
+	
+}
+
+/***********************************************************************
  * NAME : 	void getAvDen(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
@@ -1138,13 +1364,15 @@ void getAvPMD(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
 	initModels();
 	
 	/* create some temporary arrays */
-	float *mav = new float[n];
+	float *mavps = new float[n];
+	float *mavpt = new float[n];
 	float *prob = new float[n];
 	float *ps = new float[n];
 	float *pt = new float[n];
 	
 	/* run the models */
-	gAvMav->Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,mav);
+	gAvMavPS->Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,true,mavps);
+	gAvMavPT->Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,true,mavpt);
 	gAvProb->Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,prob);
 	gAvPS->Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,true,ps);
 	gAvPT->Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,true,pt);
@@ -1153,14 +1381,15 @@ void getAvPMD(int n, float *mlt, float *R, bool ShowDC, bool OnlyDC,
 	int i;
 	for (i=0;i<n;i++) {
 		if (prob[i] >= 0.5) {
-			out[i] = ps[i]*mav[i];
+			out[i] = ps[i]*mavps[i];
 		} else { 
-			out[i] = pt[i]*mav[i];
+			out[i] = pt[i]*mavpt[i];
 		}
 	}
 	
 	/* delete temporary arrays */
-	delete mav;
+	delete mavps;
+	delete mavpt;
 	delete prob;
 	delete ps;
 	delete pt;
@@ -1197,13 +1426,15 @@ void getAvPMDCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 	initModels();
 	
 	/* create some temporary arrays */
-	float *mav = new float[n];
+	float *mavps = new float[n];
+	float *mavpt = new float[n];
 	float *prob = new float[n];
 	float *ps = new float[n];
 	float *pt = new float[n];
 	
 	/* run the models */
-	gAvMav->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,mav);
+	gAvMavPS->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,true,mavps);
+	gAvMavPT->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,true,mavpt);
 	gAvProb->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,prob);
 	gAvPS->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,true,ps);
 	gAvPT->ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,true,pt);
@@ -1212,14 +1443,15 @@ void getAvPMDCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 	int i;
 	for (i=0;i<n;i++) {
 		if (prob[i] >= 0.5) {
-			out[i] = ps[i]*mav[i];
+			out[i] = ps[i]*mavps[i];
 		} else { 
-			out[i] = pt[i]*mav[i];
+			out[i] = pt[i]*mavpt[i];
 		}
 	}
 
 	/* delete temporary arrays */
-	delete mav;
+	delete mavps;
+	delete mavpt;
 	delete prob;
 	delete ps;
 	delete pt;
@@ -1227,7 +1459,7 @@ void getAvPMDCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
 }
 
 /***********************************************************************
- * NAME : 	void getScaledPMD(n,mlt,R,f107,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : 	void getScaledPMD(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
  * 		Calculates the scaled combined plasmasphere/plasmatrough plasma 
@@ -1237,7 +1469,6 @@ void getAvPMDCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
  * 		int		n			Number of points to evaluate model at.
  * 		float	*mlt		Array of local times (in hours).
  * 		float 	*R			Array of L-shells (in R_E).
- * 		float 	*f107		Array of F10.7 indices.
  * 		float 	*smr		Array of SMR indices.
  * 		bool	ShowDC		If true, DC component included in output.
  * 		bool	OnlyDC		If true, only DC component is output.
@@ -1251,20 +1482,22 @@ void getAvPMDCart(int n, float *x, float *y, bool ShowDC, bool OnlyDC,
  * 		float	*out		Output array.
  * 
  * ********************************************************************/
-void getScaledPMD(int n, float *mlt, float *R, float *f107, float *smr, bool ShowDC,  
+void getScaledPMD(int n, float *mlt, float *R, float *smr, bool ShowDC,  
 				bool OnlyDC, bool Validate, int m0, int m1, float *out) {
 	
 	/* check that the models have been loaded first */
 	initModels();
 	
 	/* create some temporary arrays */
-	float *mav = new float[n];
+	float *mavps = new float[n];
+	float *mavpt = new float[n];
 	float *prob = new float[n];
 	float *ps = new float[n];
 	float *pt = new float[n];
 	
 	/* run the models */
-	gAnnMav->Model(n,mlt,R,f107,ShowDC,OnlyDC,Validate,m0,m1,mav);
+	gAnnMavPS->Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,true,mavps);
+	gAnnMavPT->Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,true,mavpt);
 	gAnnProb->Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,prob);
 	gAnnPS->Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,true,ps);
 	gAnnPT->Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,true,pt);
@@ -1273,14 +1506,15 @@ void getScaledPMD(int n, float *mlt, float *R, float *f107, float *smr, bool Sho
 	int i;
 	for (i=0;i<n;i++) {
 		if (prob[i] >= 0.5) {
-			out[i] = ps[i]*mav[i];
+			out[i] = ps[i]*mavps[i];
 		} else { 
-			out[i] = pt[i]*mav[i];
+			out[i] = pt[i]*mavpt[i];
 		}
 	}
 	
 	/* delete temporary arrays */
-	delete mav;
+	delete mavps;
+	delete mavpt;
 	delete prob;
 	delete ps;
 	delete pt;
@@ -1288,7 +1522,7 @@ void getScaledPMD(int n, float *mlt, float *R, float *f107, float *smr, bool Sho
 }
 
 /***********************************************************************
- * NAME : 	void getScaledPMDCart(n,x,y,f107,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
+ * NAME : 	void getScaledPMDCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : 
  * 		Calculates the scaled combined plasmasphere/plasmatrough plasma 
@@ -1298,7 +1532,6 @@ void getScaledPMD(int n, float *mlt, float *R, float *f107, float *smr, bool Sho
  * 		int		n			Number of points to evaluate model at.
  * 		float	*x			Array of x-position (SM coords, in R_E).
  * 		float 	*y			Array of y-position (SM coords, in R_E).
- * 		float 	*f107		Array of F10.7 indices.
  * 		float 	*smr		Array of SMR indices.
  * 		bool	ShowDC		If true, DC component included in output.
  * 		bool	OnlyDC		If true, only DC component is output.
@@ -1312,20 +1545,22 @@ void getScaledPMD(int n, float *mlt, float *R, float *f107, float *smr, bool Sho
  * 		float	*out		Output array.
  * 
  * ********************************************************************/
-void getScaledPMDCart(int n, float *x, float *y, float *f107, float *smr, bool ShowDC,  
+void getScaledPMDCart(int n, float *x, float *y, float *smr, bool ShowDC,  
 				bool OnlyDC, bool Validate, int m0, int m1, float *out) {
 	
 	/* check that the models have been loaded first */
 	initModels();
 	
 	/* create some temporary arrays */
-	float *mav = new float[n];
+	float *mavps = new float[n];
+	float *mavpt = new float[n];
 	float *prob = new float[n];
 	float *ps = new float[n];
 	float *pt = new float[n];
 	
 	/* run the models */
-	gAnnMav->ModelCart(n,x,y,f107,ShowDC,OnlyDC,Validate,m0,m1,mav);
+	gAnnMavPS->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,true,mavps);
+	gAnnMavPT->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,true,mavpt);
 	gAnnProb->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,prob);
 	gAnnPS->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,true,ps);
 	gAnnPT->ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,true,pt);
@@ -1334,14 +1569,15 @@ void getScaledPMDCart(int n, float *x, float *y, float *f107, float *smr, bool S
 	int i;
 	for (i=0;i<n;i++) {
 		if (prob[i] >= 0.5) {
-			out[i] = ps[i]*mav[i];
+			out[i] = ps[i]*mavps[i];
 		} else { 
-			out[i] = pt[i]*mav[i];
+			out[i] = pt[i]*mavpt[i];
 		}
 	}
 	
 	/* delete temporary arrays */
-	delete mav;
+	delete mavps;
+	delete mavpt;
 	delete prob;
 	delete ps;
 	delete pt;

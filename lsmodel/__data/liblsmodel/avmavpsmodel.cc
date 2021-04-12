@@ -1,4 +1,4 @@
-#include "avmavmodel.h"
+#include "avmavpsmodel.h"
 
 
 /***********************************************************************
@@ -29,6 +29,9 @@ AvMavPSModel::AvMavPSModel(unsigned char *ptr) {
 		m_[i-1] = i;
 		wl_[i-1] = ((float) i)/24.0;
 	}
+	
+	/* reverse DC for this model */
+	reverseArray(ndc_,dc_);
 	
 	/* Finally store an object which can transform the mav values*/
 	MT_ = new MavTrans();
@@ -79,10 +82,8 @@ AvMavPSModel::~AvMavPSModel() {
  * ********************************************************************/
 void AvMavPSModel::DC(int n, float *R, float *dc) {
 
-	int i;
-	for (i=0;i<n;i++) {
-		dc[i] = dc_[0] + dc_[1]/(1.0 + expf(-dc_[2]*(R[i] - dc_[3])));
-	}
+	polynomial(ndc_,dc_,n,R,dc);
+	MT_->PSTransform(n,R,dc,dc);
 }
 
 /***********************************************************************

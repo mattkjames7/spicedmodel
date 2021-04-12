@@ -10,9 +10,12 @@ int main() {
 	
 	
 	testProbModels();
-	testMavModels();
+	testMavHModels();
 	testPSModels();
 	testPTModels();
 	
 	testMavTrans();
+	
+	testMavPSModels();
+	testMavPTModels();
 }

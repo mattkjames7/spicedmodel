@@ -3,7 +3,7 @@
 void testNetworkFunc() {
 	
 	printf("***********Test creating ANN object*********************\n");
-	NetworkFunc *ann = new NetworkFunc(&_binary_mavann_bin_start,"softplus","linear","mean_squared");
+	NetworkFunc *ann = new NetworkFunc(&_binary_mavhann_bin_start,"softplus","linear","mean_squared");
 	int i, j;
 	/* create some test values - rescale them as in the python code */
 	float R[] = {3.0,4.0,5.0};

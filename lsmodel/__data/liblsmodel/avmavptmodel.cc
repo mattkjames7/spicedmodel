@@ -1,4 +1,4 @@
-#include "avmavmodel.h"
+#include "avmavptmodel.h"
 
 
 /***********************************************************************
@@ -31,6 +31,9 @@ AvMavPTModel::AvMavPTModel(unsigned char *ptr) {
 	}
 	
 	
+	/* reverse DC for this model */
+	reverseArray(ndc_,dc_);
+		
 	/* Finally store an object which can transform the mav values*/
 	MT_ = new MavTrans();
 }
@@ -80,10 +83,8 @@ AvMavPTModel::~AvMavPTModel() {
  * ********************************************************************/
 void AvMavPTModel::DC(int n, float *R, float *dc) {
 
-	int i;
-	for (i=0;i<n;i++) {
-		dc[i] = dc_[0] + dc_[1]/(1.0 + expf(-dc_[2]*(R[i] - dc_[3])));
-	}
+	polynomial(ndc_,dc_,n,R,dc);
+	MT_->PTTransform(n,R,dc,dc);
 }
 
 /***********************************************************************

@@ -64,7 +64,9 @@ obj:
 	$(CCo) tests/matdot.cc -o tests/matdot.o
 	$(CCo) tests/netfunc.cc -o tests/netfunc.o
 	$(CCo) tests/probmodels.cc -o tests/probmodels.o
-	$(CCo) tests/mavmodels.cc -o tests/mavmodels.o
+	$(CCo) tests/mavhmodels.cc -o tests/mavhmodels.o
+	$(CCo) tests/mavpsmodels.cc -o tests/mavpsmodels.o
+	$(CCo) tests/mavptmodels.cc -o tests/mavptmodels.o
 	$(CCo) tests/psmodels.cc -o tests/psmodels.o
 	$(CCo) tests/ptmodels.cc -o tests/ptmodels.o
 	$(CCo) tests/testmavtrans.cc -o tests/testmavtrans.o
