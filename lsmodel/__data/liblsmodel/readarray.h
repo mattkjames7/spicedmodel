@@ -33,7 +33,7 @@ unsigned char * readArray(unsigned char *p, float **v, int *n);
 /***********************************************************************
  * NAME : 	unsigned char * readArray(p,v,n)
  * 
- * DESCRIPTION : Reads in a 1D integer point array from memory given a 
+ * DESCRIPTION : Reads in a 1D integer array from memory given a 
  * 				pointer.
  * 
  * INPUTS : 
