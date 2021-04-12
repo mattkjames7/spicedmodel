@@ -6,23 +6,22 @@
 #include <algorithm>
 
 /***********************************************************************
- * NAME : 	class AvMavModel
+ * NAME : 	class AvMavPSModel
  * 
  * DESCRIPTION : This class object is based upon the AvModel object and
  * 				will store the average ion mass model parameters. Its 
  * 				member functions can be used to access the model.
  * 
- * 				NOTE - this is the hot average ion mass model - it bares
- * 				little resemblance to the cold composition.
+ * 				NOTE - this is the cold ion model.
  * 
  * ********************************************************************/
-class AvMavModel: public AvModel {
+class AvMavPSModel: public AvModel {
 	public:
 		/* model constructor */
-		AvMavModel(unsigned char *);
+		AvMavPSModel(unsigned char *);
 		
 		/* model destructor */
-		~AvMavModel();
+		~AvMavPSModel();
 		
 		/* DC function */
 		void DC(int,float*,float*);
