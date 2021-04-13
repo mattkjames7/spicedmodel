@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from .Mav import Mav
+from .MavHot import MavHot
+from .MavPS import MavPS
+from .MavPT import MavPT
 from .Prob import Prob
 from .PS import PS
 from .PT import PT
@@ -14,11 +17,14 @@ from .PlotPlanet import PlotPlanet
 defargs = { 'prob' 		: (Prob,'seismic',[0.0,1.0],False,'$P(PS)$'),
 			'ps'		: (PS,'gnuplot',[100.0,2000.0],True,'$n_{e,ps}$ (cm$^{-3}$)'),
 			'pt'		: (PT,'gnuplot',[10.0,200.0],True,'$n_{e,pt}$ (cm$^{-3}$)'),
-			'mav'		: (Mav,'gnuplot',[1.0,16.0],False,'$m_{av}$ (amu)'),
+			'mav'		: (Mav,'gnuplot',[1.0,6.0],False,'$m_{av}$ (amu)'),
+			'mavhot'	: (MavHot,'gnuplot',[1.0,16.0],False,'Hot $m_{av}$ (amu)'),
+			'mavps'		: (MavPS,'gnuplot',[1.0,6.0],False,'$m_{av}$ (amu)'),
+			'mavpt'		: (MavPT,'gnuplot',[1.0,6.0],False,'$m_{av}$ (amu)'),
 			'density'	: (Density,'gnuplot',[10.0,2000.0],True,'$n_e$ (cm$^{-3}$)'),
-			'pmd'		: (PMD,'gnuplot',[10.0,30000.0],True,'$\\rho$ (amu cm$^{-3}$)'),}
+			'pmd'		: (PMD,'gnuplot',[10.0,5000.0],True,'$\\rho$ (amu cm$^{-3}$)'),}
 			
-def PlotEq(ptype,F107=None,SMR=None,ShowDC=True,OnlyDC=False,Validate=True,
+def PlotEq(ptype,SMR=None,F107=None,ShowDC=True,OnlyDC=False,Validate=True,
 			m=[1,3],fig=None,maps=[1,1,0,0],rowspan=1,colspan=1,zlog=None,
 			scale=None,cmap=None,ColorBar=True,NoonTop=True,xrnge=[-6.0,6.0],
 			yrnge=[-6.0,6.0],dx=0.1,dy=0.1):
@@ -29,14 +35,14 @@ def PlotEq(ptype,F107=None,SMR=None,ShowDC=True,OnlyDC=False,Validate=True,
 	ptype : str
 		This will determine which model to plot: 'prob'|'ps'|'pt'|'mav'|
 		'density'|'pmd'. 
-	F107 : float | None
-		Set to None for the average model, or a float (scalar or array 
-		with the same shape as x and y) for the model which is scaled by
-		the f10.7 index.
 	SMR : float | None
 		Set to None for the average model, or a float (scalar or array 
 		with the same shape as x and y) for the model which is scaled by
 		the SMR index.
+	F107 : float | None
+		Set to None for the average model, or a float (scalar or array 
+		with the same shape as x and y) for the model which is scaled by
+		the f10.7 index.
 	Coord : str
 		'xy'|'ml' - Denotes the input coordinates provided by the inputs
 		x and y, where Coord='xy' corresponds to the x and y SM 
@@ -109,12 +115,10 @@ def PlotEq(ptype,F107=None,SMR=None,ShowDC=True,OnlyDC=False,Validate=True,
 	
 
 	#calculate the model
-	if ptype in ['ps','pt','density','prob']:
-		grid = Model(xm,ym,SMR=SMR,ShowDC=ShowDC,OnlyDC=OnlyDC,Validate=Validate,m=m)
-	elif ptype == 'mav':
+	if ptype == 'mavhot':
 		grid = Model(xm,ym,F107=F107,ShowDC=ShowDC,OnlyDC=OnlyDC,Validate=Validate,m=m)
 	else:
-		grid = Model(xm,ym,F107=F107,SMR=SMR,ShowDC=ShowDC,OnlyDC=OnlyDC,Validate=Validate,m=m)
+		grid = Model(xm,ym,SMR=SMR,ShowDC=ShowDC,OnlyDC=OnlyDC,Validate=Validate,m=m)
 	
 	#get the scale
 	if scale is None:

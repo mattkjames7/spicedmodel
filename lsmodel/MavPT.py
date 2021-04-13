@@ -1,11 +1,11 @@
 import numpy as np
-from ._CFunctions import _CgetAvPMD,_CgetAvPMDCart,_CgetScaledPMD,_CgetScaledPMDCart
+from ._CFunctions import _CgetAvMavPT,_CgetAvMavPTCart,_CgetScaledMavPT,_CgetScaledMavPTCart
 from ._CTConv import _CTConv
 
-def PMD(x,y,SMR=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3]):
+def MavPT(x,y,SMR=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3],RevTrans=True):
 	'''
-	Get the combined plasmasphere/plasmatrough plasma mass density model 
-	output for a given set of input coordinates.
+	Get the cold plasmatrough average ion mass model output for a given 
+	set of input coordinates.  
 	
 	Inputs
 	======
@@ -13,7 +13,6 @@ def PMD(x,y,SMR=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3]):
 		Array or scalar coordinate (see Coord for more info).
 	y : float
 		Array or scalar coordinate (see Coord for more info).
-
 	SMR : float | None
 		Set to None for the average model, or a float (scalar or array 
 		with the same shape as x and y) for the model which is scaled by
@@ -37,29 +36,34 @@ def PMD(x,y,SMR=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3]):
 		This should be a 2-element list/tuple/array which contains the
 		lowest and highest m-numbers to include in the output (default =
 		[1,3]).
-		
+	RevTrans : bool
+		If True (default) this will reverse the Box-Cox transform of the 
+		electron densities back to physical units.
+				
 	Returns
 	=======
 	out : float
-		Array containing the plasma mass density (amu cm^-3).
+		Array of average ion mass (amu).
+	
 	'''
+	
 	
 	#get the number of elements first
 	_n = np.int32(np.size(x))
-
+	
 	#work out the shape of the input data
 	sh = np.shape(x)
 	
 	#select the possible models based on the input coords
 	if Coord == 'ml':
 		#MLT and L shell
-		av = _CgetAvPMD
-		ann = _CgetScaledPMD
+		av = _CgetAvMavPT
+		ann = _CgetScaledMavPT
 	else:
 		#x and y SM
-		av = _CgetAvPMDCart
-		ann = _CgetScaledPMDCart
-
+		av = _CgetAvMavPTCart
+		ann = _CgetScaledMavPTCart
+	
 	#now format the positions correctly
 	_x = _CTConv(x,'c_float_ptr')
 	_y = _CTConv(y,'c_float_ptr')
@@ -68,22 +72,22 @@ def PMD(x,y,SMR=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3]):
 	_Validate = _CTConv(Validate,'c_bool')
 	_m0 = _CTConv(m[0],'c_int')
 	_m1 = _CTConv(m[1],'c_int')
+	_RevTrans = _CTConv(RevTrans,'c_bool')
 	
 	#create the output array
 	_out = np.zeros(_n,dtype='float32')
 
-
 	#select and run the model based on whether we have the scaling parameter
 	if SMR is None:
 		#average model
-		av(_n,_x,_y,_ShowDC,_OnlyDC,_Validate,_m0,_m1,_out)
+		av(_n,_x,_y,_ShowDC,_OnlyDC,_Validate,_m0,_m1,_RevTrans,_out)
 	else:
-		#work out the scaling parameters
+		#work out the scaling parameter
 		if np.size(SMR) == 1:
 			_smr = np.zeros(_n,dtype='float32') + SMR
 		else:
 			_smr = _CTConv(SMR,'c_float_ptr')
-		ann(_n,_x,_y,_smr,_ShowDC,_OnlyDC,_Validate,_m0,_m1,_out)
+		ann(_n,_x,_y,_smr,_ShowDC,_OnlyDC,_Validate,_m0,_m1,_RevTrans,_out)
 		
 	#return to original shape
 	out = _out.reshape(sh)

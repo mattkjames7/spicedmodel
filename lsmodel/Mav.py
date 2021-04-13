@@ -2,10 +2,10 @@ import numpy as np
 from ._CFunctions import _CgetAvMav,_CgetAvMavCart,_CgetScaledMav,_CgetScaledMavCart
 from ._CTConv import _CTConv
 
-def Mav(x,y,F107=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3]):
+def Mav(x,y,SMR=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3]):
 	'''
-	Get the average ion mass model output for a given set of input 
-	coordinates.
+	Get the combined cold average ion mass model output for a given set 
+	of input coordinates.
 	
 	Inputs
 	======
@@ -13,10 +13,10 @@ def Mav(x,y,F107=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3])
 		Array or scalar coordinate (see Coord for more info).
 	y : float
 		Array or scalar coordinate (see Coord for more info).
-	F107 : float | None
+	SMR : float | None
 		Set to None for the average model, or a float (scalar or array 
 		with the same shape as x and y) for the model which is scaled by
-		the f10.7 index.
+		the SMR index.
 	Coord : str
 		'xy'|'ml' - Denotes the input coordinates provided by the inputs
 		x and y, where Coord='xy' corresponds to the x and y SM 
@@ -74,16 +74,16 @@ def Mav(x,y,F107=None,Coord='xy',ShowDC=True,OnlyDC=False,Validate=True,m=[1,3])
 	_out = np.zeros(_n,dtype='float32')
 
 	#select and run the model based on whether we have the scaling parameter
-	if F107 is None:
+	if SMR is None:
 		#average model
 		av(_n,_x,_y,_ShowDC,_OnlyDC,_Validate,_m0,_m1,_out)
 	else:
 		#work out the scaling parameter
-		if np.size(F107) == 1:
-			_f107 = np.zeros(_n,dtype='float32') + F107
+		if np.size(SMR) == 1:
+			_smr = np.zeros(_n,dtype='float32') + SMR
 		else:
-			_f107 = _CTConv(F107,'c_float_ptr')
-		ann(_n,_x,_y,_f107,_ShowDC,_OnlyDC,_Validate,_m0,_m1,_out)
+			_smr = _CTConv(SMR,'c_float_ptr')
+		ann(_n,_x,_y,_smr,_ShowDC,_OnlyDC,_Validate,_m0,_m1,_out)
 		
 	#return to original shape
 	out = _out.reshape(sh)
