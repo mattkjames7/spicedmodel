@@ -1,48 +1,94 @@
-#include "annmavptmodel.h"
+#include "avmavptmodel.h"
+
 
 /***********************************************************************
- * NAME : ANNMavPTModel(ptr)
+ * NAME : AvMavPTModel(ptr)
  * 
- * DESCRIPTION : Constructor of the ANNMavPTModel object.
+ * DESCRIPTION : Constructor of the AvMavPTModel object.
  * 
  * INPUTS : 
  * 		unsigned char	*ptr	pointer to the area of memory where the
  * 								parameters are stored.
  * 
  * ********************************************************************/
-ANNMavPTModel::ANNMavPTModel(unsigned char *ptr) {
+AvMavPTModel::AvMavPTModel(unsigned char *ptr) {
 	
-	/* I think that we just need to read the model in and load the
-	 * ANNModel object */
-	LoadANN(ptr);
+	/* all we need to do is initialize the object by reading in the 
+	 * model parameters from the provided memory address */
+	ReadModelParams(ptr);
+	
+	/* we could also do with storing the m-numbers and equivalent
+	 * wave lengths */
+	nm_ = min(Rshape_[0],Ishape_[0]);
+	int i;
+
+	m_ = new int[nm_];
+	wl_ = new float[nm_];
+
+	for (i=1;i<=nm_;i++) {
+		m_[i-1] = i;
+		wl_[i-1] = ((float) i)/24.0;
+	}
 	
 	
+	/* reverse DC for this model */
+	reverseArray(ndc_,dc_);
+		
 	/* Finally store an object which can transform the mav values*/
-	MT_ = new MavTrans();	
-	
+	MT_ = new MavTrans();
 }
 
 /***********************************************************************
- * NAME : ~ANNMavPTModel()
+ * NAME : ~AvMavPTModel()
  * 
- * DESCRIPTION :Destructor for the ANNMavPTModel object
+ * DESCRIPTION :Destructor for the AvMavModel object
  * 
  * 
  * ********************************************************************/
-ANNMavPTModel::~ANNMavPTModel() {
+AvMavPTModel::~AvMavPTModel() {
 	
 	/* here we need to free up the model parameters */
 	int i;
+	delete[] dc_;
+	for (i=0;i<Rshape_[0];i++) {
+		delete[] R_[i];
+	}
+	delete[] R_;
+	for (i=0;i<Ishape_[0];i++) {
+		delete[] I_[i];
+	}
+	delete[] I_;
+	
+	/* and the m-numbers */
 	delete[] m_;
 	delete[] wl_;
-	delete ann_;
-
-	delete MT_;	
+	
+	delete MT_;
+	
 }
 
+/***********************************************************************
+ * NAME : void DC()
+ * 
+ * DESCRIPTION : Calculates the DC component of the model.
+ * 
+ * INPUTS : 
+ * 		int		n		The number of elements
+ * 		float 	*R		The radial distance (L-shell)
+ * 
+ * OUTPUTS : 
+ * 		float	*dc		The output DC component of the model
+ * 
+ * 
+ * ********************************************************************/
+void AvMavPTModel::DC(int n, float *R, float *dc) {
+
+	polynomial(ndc_,dc_,n,R,dc);
+	MT_->PTTransform(n,R,dc,dc);
+}
 
 /***********************************************************************
- * NAME : void ModelCart(n,x,y,smr,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * NAME : void ModelCart(n,x,y,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : Calculates the model at a number of Cartesian x and y
  * 				positions.
@@ -51,7 +97,6 @@ ANNMavPTModel::~ANNMavPTModel() {
  * 		int		n			The number of elements
  * 		float	*x			SM x-coordinate
  * 		float 	*y			SM y-coordinate
- * 		float	*smr		The SMR index
  * 		bool	ShowDC		If true then the DC component will be included
  * 		bool	OnlyDC		If true ONLY the DC component will be included
  * 		bool	Validate	If true, then all elements will be checked
@@ -68,7 +113,7 @@ ANNMavPTModel::~ANNMavPTModel() {
  * 
  * 
  * ********************************************************************/
-void ANNMavPTModel::ModelCart(int n, float *x, float *y, float *smr,
+void AvMavPTModel::ModelCart(int n, float *x, float *y, 
 							bool ShowDC, bool OnlyDC, bool Validate, 
 							int m0, int m1, bool RevTrans, float *out) {
 				
@@ -78,7 +123,7 @@ void ANNMavPTModel::ModelCart(int n, float *x, float *y, float *smr,
 	CartMLTR(n,x,y,mlt,R);
 	
 	/* call the model function */
-	Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out);
+	Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out);
 		
 	/* clean up */
 	delete[] mlt;
@@ -86,7 +131,7 @@ void ANNMavPTModel::ModelCart(int n, float *x, float *y, float *smr,
 }
 
 /***********************************************************************
- * NAME : void Model(n,mlt,R,smr,ShowDC,OnlyDC,Validate,m0,m1,RevTrans,out)
+ * NAME : void Model(n,mlt,R,ShowDC,OnlyDC,Validate,m0,m1,out)
  * 
  * DESCRIPTION : Calculates the model at a number of positions in MLT 
  * 				and R.
@@ -95,7 +140,6 @@ void ANNMavPTModel::ModelCart(int n, float *x, float *y, float *smr,
  * 		int		n			The number of elements
  * 		float	*mlt		Magnetic local time
  * 		float 	*R			The radial distance (L-shell)
- * 		float	*smr		The SMR index
  * 		bool	ShowDC		If true then the DC component will be included
  * 		bool	OnlyDC		If true ONLY the DC component will be included
  * 		bool	Validate	If true, then all elements will be checked
@@ -105,14 +149,15 @@ void ANNMavPTModel::ModelCart(int n, float *x, float *y, float *smr,
  * 							m_av range(1.0 to 16.0 amu)
  * 		int		m0			The starting m number to include
  * 		int		m1			The final m number to include
+ * 		bool	RevTrans	Reverse transform
  * 
  * OUTPUTS : 
  * 		float	*out		The model average ion mass
  * 
  * 
  * ********************************************************************/
-void ANNMavPTModel::Model(int n, float *mlt, float *R, float *smr,
-						bool ShowDC, bool OnlyDC,bool Validate, 
+void AvMavPTModel::Model(int n, float *mlt, float *R, 
+						bool ShowDC, bool OnlyDC, bool Validate, 
 						int m0, int m1, bool RevTrans, float *out){
 	
 	/* create the arrays to store dc and periodic components of the model */
@@ -122,21 +167,15 @@ void ANNMavPTModel::Model(int n, float *mlt, float *R, float *smr,
 	for (i=0;i<nm_;i++) {
 		per[i] = new float[n];
 	}
-	
-	/* rescale F10.7 */
-	float *smrs =  new float[n];
-	for (i=0;i<n;i++) {
-		smrs[i] = rescaleSMR(smr[i]);
-	}
-	
+
 	/* now let's get the model components */
-	ModelComponents(n,mlt,R,smrs,dc,per);
+	ModelComponents(n,mlt,R,dc,per);
 
 	/* add the DC component */
 	for (i=0;i<n;i++) {
 		out[i] = dc[i];
 	}
-
+	
 	/* if we are not just returning the DC component, we need to think 
 	 * about the periodic bits of the model */
 	if (!OnlyDC) {
@@ -153,19 +192,22 @@ void ANNMavPTModel::Model(int n, float *mlt, float *R, float *smr,
 		}
 	}
 
+
+
 	/*reverse transform*/
 	if (RevTrans) {
 		MT_->PTRevTransform(n,R,out,out);
 		MT_->PTRevTransform(n,R,dc,dc);
 	}
 
+	
 	/* remove the DC component if we need to */
 	if ((!OnlyDC) && (!ShowDC)) {
 		for (i=0;i<n;i++) {
 			out[i] = out[i] - dc[i];
 		}
 	}
-	
+
 	/* make sure that we remove anything invalid*/
 	if (Validate) {
 		for (i=0;i<n;i++) {
@@ -188,10 +230,72 @@ void ANNMavPTModel::Model(int n, float *mlt, float *R, float *smr,
 		delete[] per[i];
 	}
 	delete[] per;
-	delete [] smrs;
+
 		
 }
 
 
+/***********************************************************************
+ * NAME : void ModelComponents(n,mlt,R,dc,per)
+ * 
+ * DESCRIPTION : Calculates the individual model components at a number 
+ * 				of positions in MLT and R.
+ * 
+ * INPUTS : 
+ * 		int		n			The number of elements
+ * 		float	*mlt		Magnetic local time
+ * 		float 	*R			The radial distance (L-shell)
+ * 
+ * OUTPUTS : 
+ * 		float	*dc			The DC component of the model
+ * 		float 	**per		The periodic components of the model, shape
+ * 							(nm_,n) - where nm_ is the number of 
+ * 							m-numbers supported.
+ * 
+ * 
+ * ********************************************************************/
+void AvMavPTModel::ModelComponents(int n, float *mlt, float *R, 
+								float *dc, float **per) {
 
+	/* get the DC bit of the model */
+	DC(n,R,dc);
 
+	/* now get the periodic componented of the model */
+	PeriodicComponents(n,mlt,R,per);
+
+} 
+
+/***********************************************************************
+ * NAME : void ModelComponentsCart(n,x,y,dc,per)
+ * 
+ * DESCRIPTION : Calculates the individual model components at a number 
+ * 				of Cartisian positions x and y.
+ * 
+ * INPUTS : 
+ * 		int		n			The number of elements
+ * 		float	*x			SM x-coordinate
+ * 		float 	*y			SM y-coordinate
+ * 
+ * OUTPUTS : 
+ * 		float	*dc			The DC component of the model
+ * 		float 	**per		The periodic components of the model, shape
+ * 							(nm_,n) - where nm_ is the number of 
+ * 							m-numbers supported.
+ * 
+ * 
+ * ********************************************************************/
+void AvMavPTModel::ModelComponentsCart(int n, float *x, float *y, 
+									float *dc, float **per) {
+	
+	/* convert x and y to mlt and R */
+	float *mlt = new float[n];
+	float *R = new float[n];
+	CartMLTR(n,x,y,mlt,R);
+	
+	/* call the model functions */
+	ModelComponents(n,mlt,R,dc,per);
+		
+	/* clean up */
+	delete [] mlt;
+	delete [] R;
+}

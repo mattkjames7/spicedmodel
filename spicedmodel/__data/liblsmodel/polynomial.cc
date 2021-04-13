@@ -21,7 +21,7 @@ void polynomial(int nd, double *coef, int n, float *x, double *y) {
 	for (i=0;i<n;i++) {
 		y[i] = coef[0] + coef[1]*x[i];
 		for (j=1;j<nd;j++) {
-			y[i] += coef[j+1]*powf(x[i],j+1);
+			y[i] += coef[j+1]*pow(x[i],j+1);
 		}
 	}
 	
