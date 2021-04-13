@@ -33,10 +33,174 @@ c_bool_ptr = np.ctypeslib.ndpointer(ct.c_bool,flags="C_CONTIGUOUS")
 
 #Model wrapper functions
 
-#for mav
+
+
+#for mav (cold combined)
 _CgetAvMav = liblsmodel.getAvMav
 _CgetAvMav.restype = None
-_CgetAvMav.argtypes = [	c_int,			#number of positions
+_CgetAvMav.argtypes = [		c_int,			#number of positions
+							c_float_ptr,	#MLT array
+							c_float_ptr,	#L-shell
+							c_bool,			#ShowDC
+							c_bool,			#OnlyDC
+							c_bool,			#Validate
+							c_int,			#Starting m-number
+							c_int,			#Ending m-number
+							c_float_ptr]	#Output
+						
+_CgetAvMavCart = liblsmodel.getAvMavCart
+_CgetAvMavCart.restype = None
+_CgetAvMavCart.argtypes = [		c_int,			#number of positions
+								c_float_ptr,	#x array
+								c_float_ptr,	#y array
+								c_bool,			#ShowDC
+								c_bool,			#OnlyDC
+								c_bool,			#Validate
+								c_int,			#Starting m-number
+								c_int,			#Ending m-number
+								c_float_ptr]	#Output
+							
+_CgetScaledMav = liblsmodel.getScaledMav
+_CgetScaledMav.restype = None
+_CgetScaledMav.argtypes = [		c_int,			#number of positions
+								c_float_ptr,	#MLT array
+								c_float_ptr,	#L-shell
+								c_float_ptr,	#SMR
+								c_bool,			#ShowDC
+								c_bool,			#OnlyDC
+								c_bool,			#Validate
+								c_int,			#Starting m-number
+								c_int,			#Ending m-number
+								c_float_ptr]	#Output
+						
+_CgetScaledMavCart = liblsmodel.getScaledMavCart
+_CgetScaledMavCart.restype = None
+_CgetScaledMavCart.argtypes = [		c_int,			#number of positions
+									c_float_ptr,	#x array
+									c_float_ptr,	#y array
+									c_float_ptr,	#SMR
+									c_bool,			#ShowDC
+									c_bool,			#OnlyDC
+									c_bool,			#Validate
+									c_int,			#Starting m-number
+									c_int,			#Ending m-number
+									c_float_ptr]	#Output
+
+
+#for mav (cold PT)
+_CgetAvMavPT = liblsmodel.getAvMavPT
+_CgetAvMavPT.restype = None
+_CgetAvMavPT.argtypes = [	c_int,			#number of positions
+							c_float_ptr,	#MLT array
+							c_float_ptr,	#L-shell
+							c_bool,			#ShowDC
+							c_bool,			#OnlyDC
+							c_bool,			#Validate
+							c_int,			#Starting m-number
+							c_int,			#Ending m-number
+							c_bool,			#Reverse transform
+							c_float_ptr]	#Output
+						
+_CgetAvMavPTCart = liblsmodel.getAvMavPTCart
+_CgetAvMavPTCart.restype = None
+_CgetAvMavPTCart.argtypes = [	c_int,			#number of positions
+								c_float_ptr,	#x array
+								c_float_ptr,	#y array
+								c_bool,			#ShowDC
+								c_bool,			#OnlyDC
+								c_bool,			#Validate
+								c_int,			#Starting m-number
+								c_int,			#Ending m-number
+								c_bool,			#Reverse transform
+								c_float_ptr]	#Output
+							
+_CgetScaledMavPT = liblsmodel.getScaledMavPT
+_CgetScaledMavPT.restype = None
+_CgetScaledMavPT.argtypes = [	c_int,			#number of positions
+								c_float_ptr,	#MLT array
+								c_float_ptr,	#L-shell
+								c_float_ptr,	#SMR
+								c_bool,			#ShowDC
+								c_bool,			#OnlyDC
+								c_bool,			#Validate
+								c_int,			#Starting m-number
+								c_int,			#Ending m-number
+								c_bool,			#Reverse transform
+								c_float_ptr]	#Output
+						
+_CgetScaledMavPTCart = liblsmodel.getScaledMavPTCart
+_CgetScaledMavPTCart.restype = None
+_CgetScaledMavPTCart.argtypes = [	c_int,			#number of positions
+									c_float_ptr,	#x array
+									c_float_ptr,	#y array
+									c_float_ptr,	#SMR
+									c_bool,			#ShowDC
+									c_bool,			#OnlyDC
+									c_bool,			#Validate
+									c_int,			#Starting m-number
+									c_int,			#Ending m-number
+									c_bool,			#Reverse transform
+									c_float_ptr]	#Output
+#for mav (cold PS)
+_CgetAvMavPS = liblsmodel.getAvMavPS
+_CgetAvMavPS.restype = None
+_CgetAvMavPS.argtypes = [	c_int,			#number of positions
+							c_float_ptr,	#MLT array
+							c_float_ptr,	#L-shell
+							c_bool,			#ShowDC
+							c_bool,			#OnlyDC
+							c_bool,			#Validate
+							c_int,			#Starting m-number
+							c_int,			#Ending m-number
+							c_bool,			#Reverse transform
+							c_float_ptr]	#Output
+						
+_CgetAvMavPSCart = liblsmodel.getAvMavPSCart
+_CgetAvMavPSCart.restype = None
+_CgetAvMavPSCart.argtypes = [	c_int,			#number of positions
+								c_float_ptr,	#x array
+								c_float_ptr,	#y array
+								c_bool,			#ShowDC
+								c_bool,			#OnlyDC
+								c_bool,			#Validate
+								c_int,			#Starting m-number
+								c_int,			#Ending m-number
+								c_bool,			#Reverse transform
+								c_float_ptr]	#Output
+							
+_CgetScaledMavPS = liblsmodel.getScaledMavPS
+_CgetScaledMavPS.restype = None
+_CgetScaledMavPS.argtypes = [	c_int,			#number of positions
+								c_float_ptr,	#MLT array
+								c_float_ptr,	#L-shell
+								c_float_ptr,	#SMR
+								c_bool,			#ShowDC
+								c_bool,			#OnlyDC
+								c_bool,			#Validate
+								c_int,			#Starting m-number
+								c_int,			#Ending m-number
+								c_bool,			#Reverse transform
+								c_float_ptr]	#Output
+						
+_CgetScaledMavPSCart = liblsmodel.getScaledMavPSCart
+_CgetScaledMavPSCart.restype = None
+_CgetScaledMavPSCart.argtypes = [	c_int,			#number of positions
+									c_float_ptr,	#x array
+									c_float_ptr,	#y array
+									c_float_ptr,	#SMR
+									c_bool,			#ShowDC
+									c_bool,			#OnlyDC
+									c_bool,			#Validate
+									c_int,			#Starting m-number
+									c_int,			#Ending m-number
+									c_bool,			#Reverse transform
+									c_float_ptr]	#Output
+
+
+#for mav (hot)
+_CgetAvMavH = liblsmodel.getAvMavH
+_CgetAvMavH.restype = None
+_CgetAvMavH.argtypes = [c_int,			#number of positions
 						c_float_ptr,	#MLT array
 						c_float_ptr,	#L-shell
 						c_bool,			#ShowDC
@@ -46,9 +210,9 @@ _CgetAvMav.argtypes = [	c_int,			#number of positions
 						c_int,			#Ending m-number
 						c_float_ptr]	#Output
 						
-_CgetAvMavCart = liblsmodel.getAvMavCart
-_CgetAvMavCart.restype = None
-_CgetAvMavCart.argtypes = [	c_int,			#number of positions
+_CgetAvMavHCart = liblsmodel.getAvMavHCart
+_CgetAvMavHCart.restype = None
+_CgetAvMavHCart.argtypes = [c_int,			#number of positions
 							c_float_ptr,	#x array
 							c_float_ptr,	#y array
 							c_bool,			#ShowDC
@@ -58,9 +222,9 @@ _CgetAvMavCart.argtypes = [	c_int,			#number of positions
 							c_int,			#Ending m-number
 							c_float_ptr]	#Output
 							
-_CgetScaledMav = liblsmodel.getScaledMav
-_CgetScaledMav.restype = None
-_CgetScaledMav.argtypes = [	c_int,			#number of positions
+_CgetScaledMavH = liblsmodel.getScaledMavH
+_CgetScaledMavH.restype = None
+_CgetScaledMavH.argtypes = [c_int,			#number of positions
 							c_float_ptr,	#MLT array
 							c_float_ptr,	#L-shell
 							c_float_ptr,	#F10.7
@@ -71,9 +235,9 @@ _CgetScaledMav.argtypes = [	c_int,			#number of positions
 							c_int,			#Ending m-number
 							c_float_ptr]	#Output
 						
-_CgetScaledMavCart = liblsmodel.getScaledMavCart
-_CgetScaledMavCart.restype = None
-_CgetScaledMavCart.argtypes = [	c_int,			#number of positions
+_CgetScaledMavHCart = liblsmodel.getScaledMavHCart
+_CgetScaledMavHCart.restype = None
+_CgetScaledMavHCart.argtypes = [c_int,			#number of positions
 								c_float_ptr,	#x array
 								c_float_ptr,	#y array
 								c_float_ptr,	#F10.7
@@ -299,7 +463,7 @@ _CgetScaledDenCart.argtypes = [	c_int,			#number of positions
 #for combined plasma mass density
 _CgetAvPMD = liblsmodel.getAvPMD
 _CgetAvPMD.restype = None
-_CgetAvPMD.argtypes = [	c_int,			#number of positions
+_CgetAvPMD.argtypes = [		c_int,			#number of positions
 							c_float_ptr,	#MLT array
 							c_float_ptr,	#L-shell
 							c_bool,			#ShowDC
@@ -311,7 +475,7 @@ _CgetAvPMD.argtypes = [	c_int,			#number of positions
 						
 _CgetAvPMDCart = liblsmodel.getAvPMDCart
 _CgetAvPMDCart.restype = None
-_CgetAvPMDCart.argtypes = [	c_int,			#number of positions
+_CgetAvPMDCart.argtypes = [		c_int,			#number of positions
 								c_float_ptr,	#x array
 								c_float_ptr,	#y array
 								c_bool,			#ShowDC
@@ -323,10 +487,9 @@ _CgetAvPMDCart.argtypes = [	c_int,			#number of positions
 							
 _CgetScaledPMD = liblsmodel.getScaledPMD
 _CgetScaledPMD.restype = None
-_CgetScaledPMD.argtypes = [	c_int,			#number of positions
+_CgetScaledPMD.argtypes = [		c_int,			#number of positions
 								c_float_ptr,	#MLT array
 								c_float_ptr,	#L-shell
-								c_float_ptr,	#F10.7
 								c_float_ptr,	#SMR
 								c_bool,			#ShowDC
 								c_bool,			#OnlyDC
@@ -340,7 +503,6 @@ _CgetScaledPMDCart.restype = None
 _CgetScaledPMDCart.argtypes = [	c_int,			#number of positions
 									c_float_ptr,	#x array
 									c_float_ptr,	#y array
-									c_float_ptr,	#F10.7
 									c_float_ptr,	#SMR
 									c_bool,			#ShowDC
 									c_bool,			#OnlyDC
