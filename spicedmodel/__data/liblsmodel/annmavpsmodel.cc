@@ -169,7 +169,7 @@ void ANNMavPSModel::Model(int n, float *mlt, float *R, float *smr,
 	/* make sure that we remove anything invalid*/
 	if (Validate) {
 		for (i=0;i<n;i++) {
-			if ((R[i] > 5.9) || (R[i] < 2.0)) {
+			if ((R[i] > 5.9) || (R[i] < 1.5)) {
 				/* outside of the model L-shell range */
 				out[i] = NAN;
 			} else if ((out[i] > 16.0) && (ShowDC) && (RevTrans)) {
