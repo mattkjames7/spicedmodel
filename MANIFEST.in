@@ -1,2 +1,2 @@
-recursive-include lsmodel/__data/liblsmodel *
+recursive-include spicedmodel/__data/liblsmodel *
 
