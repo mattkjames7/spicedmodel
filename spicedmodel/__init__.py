@@ -1,3 +1,5 @@
+__version__ = '1.0.0'
+
 from . import _CFunctions
 from .Mav import Mav
 from .MavHot import MavHot

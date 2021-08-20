@@ -2,7 +2,21 @@
 
 Python wrapper for the Scalable Plasma Ion Composition and Electron Density (SPICED) model.
 
+A link to the paper describing this model will be provided here once published.
+
+James, M. K., Yeoman, T.K., Jones, P., Sandhu, J. K., Goldstein, J. (2021), The Scalable Plasma Ion Composition and Electron Density (SPICED) model for Earth's inner magnetosphere, *J. Geophys. Res. Space Physics*
+
+
+
 ## Installation
+
+### Using `pip`
+
+This will download the package from PyPI:
+
+```bash
+pip3 install spicedmodel --user
+```
 
 ### From Source
 
@@ -27,14 +41,6 @@ pip3 install dist/spicedmodel-XXX.whl --user
 ```
 
 where `"XXX"` is the rest of the file name, which will vary depending upon the current version.
-
-### Using `pip`
-
-This will download the package from PyPI:
-
-```bash
-pip3 install spicedmodel --user
-```
 
 ## Usage
 
