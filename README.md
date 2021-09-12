@@ -2,11 +2,11 @@
 
 Python wrapper for the Scalable Plasma Ion Composition and Electron Density (SPICED) model.
 
-A link to the paper describing this model will be provided here once published.
+The paper:
 
-James, M. K., Yeoman, T.K., Jones, P., Sandhu, J. K., Goldstein, J. (2021), The Scalable Plasma Ion Composition and Electron Density (SPICED) model for Earth's inner magnetosphere, *J. Geophys. Res. Space Physics*
+James, M. K., Yeoman, T.K., Jones, P., Sandhu, J. K., Goldstein, J. (2021), The Scalable Plasma Ion Composition and Electron Density (SPICED) model for Earth's inner magnetosphere, *J. Geophys. Res. Space Physics*,  https://doi.org/10.1029/2021JA029565
 
-
+[![DOI](https://zenodo.org/badge/244674501.svg)](https://zenodo.org/badge/latestdoi/244674501)
 
 ## Installation
 
