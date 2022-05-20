@@ -1,23 +1,40 @@
 import numpy as np
 import ctypes as ct
 import os
+import platform
 
-try:
-	liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.so")
-except:
-	print('importing liblsmodel.so failed, attempting to recompile')
-	path = os.path.dirname(__file__)
-	if '/usr/local/' in path:
-		sudo = 'sudo '
-	else:
-		sudo = ''
+OS = platform.system()
+if OS == 'Linux':
+	try:
+		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.so")
+	except:
+		print('importing liblsmodel.so failed, attempting to recompile')
+		path = os.path.dirname(__file__)
+		if '/usr/local/' in path:
+			sudo = 'sudo '
+		else:
+			sudo = ''
 
-	CWD = os.getcwd()
-	os.chdir(os.path.dirname(__file__)+"/__data/liblsmodel/")
-	os.system(sudo+'make clean')
-	os.system(sudo+'make')
-	os.chdir(CWD)	
-	liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.so")
+		CWD = os.getcwd()
+		os.chdir(os.path.dirname(__file__)+"/__data/liblsmodel/")
+		os.system(sudo+'make clean')
+		os.system(sudo+'make')
+		os.chdir(CWD)	
+		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.so")
+elif OS == 'Windows':
+	try:
+		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.dll")
+	except:
+		print('importing liblsmodel.so failed, attempting to recompile')
+		path = os.path.dirname(__file__)
+
+		CWD = os.getcwd()
+		os.chdir(os.path.dirname(__file__)+"/__data/liblsmodel/")
+		os.system('build.bat')
+		os.chdir(CWD)			
+		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.dll")
+else:
+	print("Looks like you're running this on {:s}, sorry I am unlikely to work...".format(OS))
 
 #define some dtypes
 c_char_p = ct.c_char_p
