@@ -21,11 +21,28 @@ if OS == 'Linux':
 		os.system(sudo+'make')
 		os.chdir(CWD)	
 		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.so")
+elif OS == 'Darwin':
+	try:
+		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dylib")
+	except:
+		print('importing liblsmodel.dylib failed, attempting to recompile')
+		path = os.path.dirname(__file__)
+		if '/usr/local/' in path:
+			sudo = 'sudo '
+		else:
+			sudo = ''
+
+		CWD = os.getcwd()
+		os.chdir(os.path.dirname(__file__)+"/__data/spiced/")
+		os.system(sudo+'make clean')
+		os.system(sudo+'make')
+		os.chdir(CWD)	
+		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dylib")
 elif OS == 'Windows':
 	try:
 		liblsmodel = ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libspiced.dll")
 	except:
-		print('importing liblsmodel.so failed, attempting to recompile')
+		print('importing liblsmodel.dll failed, attempting to recompile')
 		path = os.path.dirname(__file__)
 
 		CWD = os.getcwd()
