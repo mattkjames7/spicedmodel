@@ -23,16 +23,17 @@ if OS == 'Linux':
 		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.so")
 elif OS == 'Windows':
 	try:
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dll")
+		liblsmodel = ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libspiced.dll")
 	except:
 		print('importing liblsmodel.so failed, attempting to recompile')
 		path = os.path.dirname(__file__)
 
 		CWD = os.getcwd()
 		os.chdir(os.path.dirname(__file__)+"/__data/spiced/")
-		os.system('build.bat')
-		os.chdir(CWD)			
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dll")
+		os.system('compile.bat')
+		os.chdir(CWD)		
+		lname = os.path.dirname(__file__)+r"\__data\spiced\lib\libspiced.dll"
+		liblsmodel = ct.CDLL(lname)
 else:
 	print("Looks like you're running this on {:s}, sorry I am unlikely to work...".format(OS))
 
