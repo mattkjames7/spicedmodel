@@ -5,6 +5,14 @@ import importlib
 import numpy as np
 
 
+RTOL = 2e-5
+ATOL = 2e-5
+# Isolated physical-space Fourier terms are calculated by subtracting the
+# reverse-transformed DC output. That cancellation varies slightly between
+# compilers even when the complete model output is stable.
+FOURIER_ATOL = 1e-3
+
+
 def _array(section):
     return np.asarray(section["values"], dtype=np.float32).reshape(section["shape"])
 
@@ -17,7 +25,7 @@ def test_model_matches_golden_grid(golden):
 
     actual_average = model(mlt, radius, Coord=inputs["coord"])
     np.testing.assert_allclose(
-        actual_average, _array(golden["average"]), rtol=2e-5, atol=2e-5, equal_nan=True
+        actual_average, _array(golden["average"]), rtol=RTOL, atol=ATOL, equal_nan=True
     )
 
     parameter = "F107" if "F107" in inputs else "SMR"
@@ -26,7 +34,7 @@ def test_model_matches_golden_grid(golden):
          for value in inputs[parameter]]
     )
     np.testing.assert_allclose(
-        actual_scaled, _array(golden["scaled"]), rtol=2e-5, atol=2e-5, equal_nan=True
+        actual_scaled, _array(golden["scaled"]), rtol=RTOL, atol=ATOL, equal_nan=True
     )
 
 
@@ -47,15 +55,15 @@ def test_model_components_match_golden_grid(golden):
     np.testing.assert_allclose(
         actual_average_dc,
         _array(components["average"]["dc"]),
-        rtol=2e-5,
-        atol=2e-5,
+        rtol=RTOL,
+        atol=ATOL,
         equal_nan=True,
     )
     np.testing.assert_allclose(
         actual_average_fourier,
         _array(components["average"]["fourier"]),
-        rtol=2e-5,
-        atol=2e-5,
+        rtol=RTOL,
+        atol=FOURIER_ATOL,
         equal_nan=True,
     )
 
@@ -93,15 +101,15 @@ def test_model_components_match_golden_grid(golden):
     np.testing.assert_allclose(
         actual_scaled_dc,
         _array(components["scaled"]["dc"]),
-        rtol=2e-5,
-        atol=2e-5,
+        rtol=RTOL,
+        atol=ATOL,
         equal_nan=True,
     )
     np.testing.assert_allclose(
         actual_scaled_fourier,
         _array(components["scaled"]["fourier"]),
-        rtol=2e-5,
-        atol=2e-5,
+        rtol=RTOL,
+        atol=FOURIER_ATOL,
         equal_nan=True,
     )
 
