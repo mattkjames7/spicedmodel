@@ -5,36 +5,17 @@ import platform
 
 OS = platform.system()
 if OS == 'Linux':
-	try:
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.so")
-	except:
-		print('importing liblsmodel.so failed, attempting to recompile')
-		path = os.path.dirname(__file__)
-		if '/usr/local/' in path:
-			sudo = 'sudo '
-		else:
-			sudo = ''
-
-		CWD = os.getcwd()
-		os.chdir(os.path.dirname(__file__)+"/__data/liblsmodel/")
-		os.system(sudo+'make clean')
-		os.system(sudo+'make')
-		os.chdir(CWD)	
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.so")
+	ct.CDLL("libgomp.so.1", mode=ct.RTLD_GLOBAL)
+	ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libann/lib/libann.so", mode=ct.RTLD_GLOBAL)
+	liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.so")
+elif OS == 'Darwin':
+	ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libann/lib/libann.dylib", mode=ct.RTLD_GLOBAL)
+	liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dylib")
 elif OS == 'Windows':
-	try:
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.dll")
-	except:
-		print('importing liblsmodel.so failed, attempting to recompile')
-		path = os.path.dirname(__file__)
-
-		CWD = os.getcwd()
-		os.chdir(os.path.dirname(__file__)+"/__data/liblsmodel/")
-		os.system('build.bat')
-		os.chdir(CWD)			
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/liblsmodel/liblsmodel.dll")
+	ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libann\lib\libann.dll")
+	liblsmodel = ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libspiced.dll")
 else:
-	print("Looks like you're running this on {:s}, sorry I am unlikely to work...".format(OS))
+	raise OSError("Unsupported operating system: {:s}".format(OS))
 
 #define some dtypes
 c_char_p = ct.c_char_p
@@ -527,4 +508,3 @@ _CgetScaledPMDCart.argtypes = [	c_int,			#number of positions
 									c_int,			#Starting m-number
 									c_int,			#Ending m-number
 									c_float_ptr]	#Output
-

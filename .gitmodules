@@ -1,0 +1,3 @@
+[submodule "spicedmodel/__data/spiced"]
+	path = spicedmodel/__data/spiced
+	url = https://github.com/mattkjames7/spiced
