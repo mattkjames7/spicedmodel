@@ -5,54 +5,17 @@ import platform
 
 OS = platform.system()
 if OS == 'Linux':
-	try:
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.so")
-	except:
-		print('importing liblsmodel.so failed, attempting to recompile')
-		path = os.path.dirname(__file__)
-		if '/usr/local/' in path:
-			sudo = 'sudo '
-		else:
-			sudo = ''
-
-		CWD = os.getcwd()
-		os.chdir(os.path.dirname(__file__)+"/__data/spiced/")
-		os.system(sudo+'make clean')
-		os.system(sudo+'make')
-		os.chdir(CWD)	
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.so")
+	ct.CDLL("libgomp.so.1", mode=ct.RTLD_GLOBAL)
+	ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libann/lib/libann.so", mode=ct.RTLD_GLOBAL)
+	liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.so")
 elif OS == 'Darwin':
-	try:
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dylib")
-	except:
-		print('importing liblsmodel.dylib failed, attempting to recompile')
-		path = os.path.dirname(__file__)
-		if '/usr/local/' in path:
-			sudo = 'sudo '
-		else:
-			sudo = ''
-
-		CWD = os.getcwd()
-		os.chdir(os.path.dirname(__file__)+"/__data/spiced/")
-		os.system(sudo+'make clean')
-		os.system(sudo+'make')
-		os.chdir(CWD)	
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dylib")
+	ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libann/lib/libann.dylib", mode=ct.RTLD_GLOBAL)
+	liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dylib")
 elif OS == 'Windows':
-	try:
-		liblsmodel = ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libspiced.dll")
-	except:
-		print('importing liblsmodel.dll failed, attempting to recompile')
-		path = os.path.dirname(__file__)
-
-		CWD = os.getcwd()
-		os.chdir(os.path.dirname(__file__)+"/__data/spiced/")
-		os.system('compile.bat')
-		os.chdir(CWD)		
-		lname = os.path.dirname(__file__)+r"\__data\spiced\lib\libspiced.dll"
-		liblsmodel = ct.CDLL(lname)
+	ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libann\lib\libann.dll")
+	liblsmodel = ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libspiced.dll")
 else:
-	print("Looks like you're running this on {:s}, sorry I am unlikely to work...".format(OS))
+	raise OSError("Unsupported operating system: {:s}".format(OS))
 
 #define some dtypes
 c_char_p = ct.c_char_p
@@ -545,4 +508,3 @@ _CgetScaledPMDCart.argtypes = [	c_int,			#number of positions
 									c_int,			#Starting m-number
 									c_int,			#Ending m-number
 									c_float_ptr]	#Output
-

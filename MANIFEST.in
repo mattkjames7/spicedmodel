@@ -1,2 +1,3 @@
-recursive-include spicedmodel/__data/liblsmodel *
-
+recursive-include spicedmodel/__data/spiced *
+prune spicedmodel/__data/spiced/build
+global-exclude *.o *.so *.dylib *.dll
