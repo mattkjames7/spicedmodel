@@ -72,7 +72,7 @@ class BuildPy(build_py):
 		if system == "Windows":
 			sources = {
 				"libspiced.dll": os.path.join(install_dir, "bin", "spiced.dll"),
-				"libann.dll": os.path.join(install_dir, "bin", "ann.dll"),
+				"ann.dll": os.path.join(install_dir, "bin", "ann.dll"),
 			}
 		elif system == "Darwin":
 			sources = {

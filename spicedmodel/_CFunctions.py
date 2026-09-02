@@ -11,8 +11,10 @@ elif OS == 'Darwin':
 	ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libann.dylib", mode=ct.RTLD_GLOBAL)
 	liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dylib")
 elif OS == 'Windows':
-	ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libann.dll")
-	liblsmodel = ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libspiced.dll")
+	dll_dir = os.path.dirname(__file__)+r"\__data\spiced\lib"
+	with os.add_dll_directory(dll_dir):
+		ct.CDLL(dll_dir+r"\ann.dll")
+		liblsmodel = ct.CDLL(dll_dir+r"\libspiced.dll")
 else:
 	raise OSError("Unsupported operating system: {:s}".format(OS))
 
