@@ -4,6 +4,7 @@ from setuptools.dist import Distribution
 import os
 import platform
 import shutil
+import stat
 import subprocess
 
 with open("README.md", "r") as fh:
@@ -33,6 +34,12 @@ def getversion():
 	return version
 	
 version = getversion()
+
+
+def remove_readonly(func, path, _exc_info):
+	"""Retry removal after clearing Windows read-only attributes."""
+	os.chmod(path, stat.S_IWRITE | stat.S_IREAD | stat.S_IEXEC)
+	func(path)
 
 
 class BuildPy(build_py):
@@ -84,8 +91,8 @@ class BuildPy(build_py):
 			shutil.copy2(source, os.path.join(runtime_dir, filename), follow_symlinks=True)
 
 		# Keep CMake intermediates and install metadata out of the wheel.
-		shutil.rmtree(build_dir)
-		shutil.rmtree(install_dir)
+		shutil.rmtree(build_dir, onerror=remove_readonly)
+		shutil.rmtree(install_dir, onerror=remove_readonly)
 
 
 class BinaryDistribution(Distribution):
