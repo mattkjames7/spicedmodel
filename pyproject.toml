@@ -27,6 +27,7 @@ minimum-version = "build-system.requires"
 cmake.version = ">=3.20"
 cmake.build-type = "Release"
 wheel.packages = ["spicedmodel"]
+wheel.py-api = "py3"
 install.components = ["Python"]
 sdist.exclude = [
     "spicedmodel/__data/spiced/build",
