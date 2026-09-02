@@ -5,12 +5,14 @@ import importlib
 import numpy as np
 
 
-RTOL = 2e-5
+# The bundled C++ model uses platform libm implementations, so the final few
+# float32 bits can differ between Linux, macOS, and Windows.
+RTOL = 3e-5
 ATOL = 2e-5
 # Isolated physical-space Fourier terms are calculated by subtracting the
 # reverse-transformed DC output. That cancellation varies slightly between
 # compilers even when the complete model output is stable.
-FOURIER_ATOL = 1e-3
+FOURIER_ATOL = 2e-3
 
 
 def _array(section):

@@ -76,9 +76,6 @@ jobs:
 
   windows-msvc-build-and-test:
     runs-on: windows-latest
-    env:
-      CMAKE_GENERATOR: Visual Studio 17 2022
-      CMAKE_GENERATOR_PLATFORM: x64
 
     steps:
       - name: Check out repository
