@@ -1,7 +1,6 @@
 import setuptools
 from setuptools.command.build_py import build_py
 from setuptools.dist import Distribution
-import glob
 import os
 import platform
 import shutil
@@ -46,27 +45,47 @@ class BuildPy(build_py):
 		spiced_dir = os.path.join(
 			self.build_lib, "spicedmodel", "__data", "spiced"
 		)
+		build_dir = os.path.join(spiced_dir, "build")
+		install_dir = os.path.join(spiced_dir, "_install")
 		system = platform.system()
-		if system == "Windows":
-			command = ["cmd", "/c", "compile.bat"]
-		else:
-			command = ["make"]
 		self.announce("building bundled SPICED library", level=2)
-		if system == "Linux":
-			# libann's makefile does not assign an SONAME, so the dynamic
-			# loader cannot match it when libspiced requests "libann.so".
-			subprocess.run(["make", "libann"], cwd=spiced_dir, check=True)
-			ann_objects = glob.glob(os.path.join(spiced_dir, "build", "*.o"))
-			subprocess.run([
-				"g++", *ann_objects, "-shared", "-fopenmp",
-				"-Wl,-soname,libann.so", "-o",
-				os.path.join(spiced_dir, "lib", "libann", "lib", "libann.so"),
-			], check=True)
-			subprocess.run(["make", "obj", "lib"], cwd=spiced_dir, check=True)
+		subprocess.run([
+			"cmake", "-S", spiced_dir, "-B", build_dir,
+			"-DCMAKE_BUILD_TYPE=Release",
+			"-DBUILD_TESTING=OFF",
+			f"-DCMAKE_INSTALL_PREFIX={install_dir}",
+		], check=True)
+		subprocess.run(
+			["cmake", "--build", build_dir, "--config", "Release"], check=True
+		)
+		subprocess.run(
+			["cmake", "--install", build_dir, "--config", "Release"], check=True
+		)
+
+		if system == "Windows":
+			sources = {
+				"libspiced.dll": os.path.join(install_dir, "bin", "spiced.dll"),
+				"libann.dll": os.path.join(install_dir, "bin", "ann.dll"),
+			}
+		elif system == "Darwin":
+			sources = {
+				"libspiced.dylib": os.path.join(install_dir, "lib", "libspiced.dylib"),
+				"libann.dylib": os.path.join(install_dir, "lib", "libann.dylib"),
+			}
 		else:
-			subprocess.run(command, cwd=spiced_dir, check=True)
-		# Object files are build intermediates, not package data.
-		shutil.rmtree(os.path.join(spiced_dir, "build"), ignore_errors=True)
+			sources = {
+				"libspiced.so": os.path.join(install_dir, "lib", "libspiced.so"),
+				"libann.so": os.path.join(install_dir, "lib", "libann.so"),
+			}
+
+		runtime_dir = os.path.join(spiced_dir, "lib")
+		os.makedirs(runtime_dir, exist_ok=True)
+		for filename, source in sources.items():
+			shutil.copy2(source, os.path.join(runtime_dir, filename), follow_symlinks=True)
+
+		# Keep CMake intermediates and install metadata out of the wheel.
+		shutil.rmtree(build_dir)
+		shutil.rmtree(install_dir)
 
 
 class BinaryDistribution(Distribution):
