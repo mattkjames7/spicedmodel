@@ -1,3 +1,50 @@
 [build-system]
-requires = ["setuptools>=61", "wheel", "cmake>=3.20"]
-build-backend = "setuptools.build_meta"
+requires = ["scikit-build-core>=1.0.3"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "spicedmodel"
+version = "1.0.0"
+description = "Python wrapper for the Scalable Plasma Ion Composition and Electron Density (SPICED) model"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Matthew Knight James", email = "mattkjames7@gmail.com" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "numpy",
+    "matplotlib",
+]
+
+[project.urls]
+Homepage = "https://github.com/mattkjames7/spicedmodel"
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+cmake.version = ">=3.20"
+cmake.build-type = "Release"
+wheel.packages = ["spicedmodel"]
+install.components = ["Python"]
+sdist.exclude = [
+    "spicedmodel/__data/spiced/build",
+    "spicedmodel/__data/spiced/.git",
+    "**/__pycache__",
+]
+wheel.exclude = [
+    "spicedmodel/__data/spiced/.github",
+    "spicedmodel/__data/spiced/cmake",
+    "spicedmodel/__data/spiced/examples",
+    "spicedmodel/__data/spiced/include",
+    "spicedmodel/__data/spiced/legacy",
+    "spicedmodel/__data/spiced/src",
+    "spicedmodel/__data/spiced/test",
+    "spicedmodel/__data/spiced/.git*",
+    "spicedmodel/__data/spiced/BUILD.md",
+    "spicedmodel/__data/spiced/CMakeLists.txt",
+    "spicedmodel/__data/spiced/LICENSE",
+    "spicedmodel/__data/spiced/README.md",
+    "spicedmodel/__data/spiced/data.tar.gz",
+]

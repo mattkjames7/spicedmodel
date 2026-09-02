@@ -14,7 +14,7 @@ elif OS == 'Windows':
 	dll_dir = os.path.dirname(__file__)+r"\__data\spiced\lib"
 	with os.add_dll_directory(dll_dir):
 		ct.CDLL(dll_dir+r"\ann.dll")
-		liblsmodel = ct.CDLL(dll_dir+r"\libspiced.dll")
+		liblsmodel = ct.CDLL(dll_dir+r"\spiced.dll")
 else:
 	raise OSError("Unsupported operating system: {:s}".format(OS))
 
