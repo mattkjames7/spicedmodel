@@ -5,15 +5,16 @@ import platform
 
 OS = platform.system()
 if OS == 'Linux':
-	ct.CDLL("libgomp.so.1", mode=ct.RTLD_GLOBAL)
-	ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libann/lib/libann.so", mode=ct.RTLD_GLOBAL)
+	ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libann.so", mode=ct.RTLD_GLOBAL)
 	liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.so")
 elif OS == 'Darwin':
-	ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libann/lib/libann.dylib", mode=ct.RTLD_GLOBAL)
+	ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libann.dylib", mode=ct.RTLD_GLOBAL)
 	liblsmodel = ct.CDLL(os.path.dirname(__file__)+"/__data/spiced/lib/libspiced.dylib")
 elif OS == 'Windows':
-	ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libann\lib\libann.dll")
-	liblsmodel = ct.CDLL(os.path.dirname(__file__)+r"\__data\spiced\lib\libspiced.dll")
+	dll_dir = os.path.dirname(__file__)+r"\__data\spiced\lib"
+	with os.add_dll_directory(dll_dir):
+		ct.CDLL(dll_dir+r"\ann.dll")
+		liblsmodel = ct.CDLL(dll_dir+r"\spiced.dll")
 else:
 	raise OSError("Unsupported operating system: {:s}".format(OS))
 

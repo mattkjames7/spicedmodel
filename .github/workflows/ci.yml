@@ -2,13 +2,87 @@ name: CI
 
 on:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      linux_x86_64:
+        description: Build for Linux x86_64
+        type: boolean
+        default: true
+      linux_aarch64:
+        description: Build for Linux ARM64
+        type: boolean
+        default: false
+      macos_arm64:
+        description: Build for macOS ARM64
+        type: boolean
+        default: true
+      macos_x86_64:
+        description: Build for macOS x86_64
+        type: boolean
+        default: false
+      windows_x86_64:
+        description: Build for Windows x86_64
+        type: boolean
+        default: true
+      windows_arm64:
+        description: Build for Windows ARM64
+        type: boolean
+        default: false
+      upload_artifacts:
+        description: Upload wheels and one source distribution
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      linux_x86_64:
+        description: Build for Linux x86_64
+        type: boolean
+        default: true
+      linux_aarch64:
+        description: Build for Linux ARM64
+        type: boolean
+        default: false
+      macos_arm64:
+        description: Build for macOS ARM64
+        type: boolean
+        default: true
+      macos_x86_64:
+        description: Build for macOS x86_64
+        type: boolean
+        default: false
+      windows_x86_64:
+        description: Build for Windows x86_64
+        type: boolean
+        default: true
+      windows_arm64:
+        description: Build for Windows ARM64
+        type: boolean
+        default: false
+      upload_artifacts:
+        description: Upload wheels and one source distribution
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+  linux:
+    if: github.event_name == 'pull_request' || inputs.linux_x86_64 || inputs.linux_aarch64
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(
+          github.event_name == 'pull_request' &&
+          '[{"arch":"x86_64","runner":"ubuntu-latest","python_arch":"x64","primary":true}]' ||
+          inputs.linux_x86_64 && inputs.linux_aarch64 &&
+          '[{"arch":"x86_64","runner":"ubuntu-latest","python_arch":"x64","primary":true},{"arch":"aarch64","runner":"ubuntu-24.04-arm","python_arch":"arm64","primary":false}]' ||
+          inputs.linux_x86_64 &&
+          '[{"arch":"x86_64","runner":"ubuntu-latest","python_arch":"x64","primary":true}]' ||
+          '[{"arch":"aarch64","runner":"ubuntu-24.04-arm","python_arch":"arm64","primary":true}]'
+          ) }}
+    name: linux-${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
 
     steps:
       - name: Check out repository
@@ -20,11 +94,87 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
+          architecture: ${{ matrix.python_arch }}
 
-      - name: Build distributions
+      - name: Build manylinux wheel
+        run: ./container-build.sh "${{ matrix.arch }}"
+
+      - name: Build source distribution
+        if: inputs.upload_artifacts && matrix.primary
         run: |
           python -m pip install build
-          python -m build .
+          python -m build --sdist .
+
+      - name: Install wheel into test environment
+        run: |
+          python -m venv "$RUNNER_TEMP/spicedmodel-test-venv"
+          "$RUNNER_TEMP/spicedmodel-test-venv/bin/python" -m pip install wheelhouse/*.whl pytest
+
+      - name: Run installed-package tests
+        working-directory: ${{ runner.temp }}
+        env:
+          MPLCONFIGDIR: ${{ runner.temp }}/matplotlib
+        run: |
+          "$RUNNER_TEMP/spicedmodel-test-venv/bin/python" -m pytest "$GITHUB_WORKSPACE/tests"
+
+      - name: Upload wheel
+        if: inputs.upload_artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: wheel-linux-${{ matrix.arch }}
+          path: wheelhouse/*.whl
+          if-no-files-found: error
+
+      - name: Upload source distribution
+        if: inputs.upload_artifacts && matrix.primary
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: source-distribution
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  macos:
+    if: github.event_name == 'pull_request' || inputs.macos_arm64 || inputs.macos_x86_64
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(
+          github.event_name == 'pull_request' &&
+          '[{"arch":"arm64","runner":"macos-latest","python_arch":"arm64","primary":true}]' ||
+          inputs.macos_arm64 && inputs.macos_x86_64 &&
+          '[{"arch":"arm64","runner":"macos-latest","python_arch":"arm64","primary":true},{"arch":"x86_64","runner":"macos-15-intel","python_arch":"x64","primary":false}]' ||
+          inputs.macos_arm64 &&
+          '[{"arch":"arm64","runner":"macos-latest","python_arch":"arm64","primary":true}]' ||
+          '[{"arch":"x86_64","runner":"macos-15-intel","python_arch":"x64","primary":true}]'
+          ) }}
+    name: macos-${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+          architecture: ${{ matrix.python_arch }}
+
+      - name: Install OpenMP
+        run: |
+          brew install libomp
+          echo "OpenMP_ROOT=$(brew --prefix libomp)" >> "$GITHUB_ENV"
+
+      - name: Build wheel
+        run: |
+          python -m pip install build
+          python -m build --wheel .
+
+      - name: Build source distribution
+        if: inputs.upload_artifacts && matrix.primary && !inputs.linux_x86_64 && !inputs.linux_aarch64
+        run: python -m build --sdist .
 
       - name: Install wheel into test environment
         run: |
@@ -37,3 +187,91 @@ jobs:
           MPLCONFIGDIR: ${{ runner.temp }}/matplotlib
         run: |
           "$RUNNER_TEMP/spicedmodel-test-venv/bin/python" -m pytest "$GITHUB_WORKSPACE/tests"
+
+      - name: Upload wheel
+        if: inputs.upload_artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: wheel-macos-${{ matrix.arch }}
+          path: dist/*.whl
+          if-no-files-found: error
+
+      - name: Upload source distribution
+        if: inputs.upload_artifacts && matrix.primary && !inputs.linux_x86_64 && !inputs.linux_aarch64
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: source-distribution
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  windows:
+    if: github.event_name == 'pull_request' || inputs.windows_x86_64 || inputs.windows_arm64
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(
+          github.event_name == 'pull_request' &&
+          '[{"arch":"x86_64","runner":"windows-latest","python_arch":"x64","primary":true}]' ||
+          inputs.windows_x86_64 && inputs.windows_arm64 &&
+          '[{"arch":"x86_64","runner":"windows-latest","python_arch":"x64","primary":true},{"arch":"arm64","runner":"windows-11-arm","python_arch":"arm64","primary":false}]' ||
+          inputs.windows_x86_64 &&
+          '[{"arch":"x86_64","runner":"windows-latest","python_arch":"x64","primary":true}]' ||
+          '[{"arch":"arm64","runner":"windows-11-arm","python_arch":"arm64","primary":true}]'
+          ) }}
+    name: windows-${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+          architecture: ${{ matrix.python_arch }}
+
+      - name: Build wheel with MSVC
+        run: |
+          python -m pip install build
+          python -m build --wheel .
+
+      - name: Build source distribution
+        if: inputs.upload_artifacts && matrix.primary && !inputs.linux_x86_64 && !inputs.linux_aarch64 && !inputs.macos_arm64 && !inputs.macos_x86_64
+        run: python -m build --sdist .
+
+      - name: Install wheel into test environment
+        shell: pwsh
+        run: |
+          $venv = Join-Path $env:RUNNER_TEMP "spicedmodel-test-venv"
+          python -m venv $venv
+          $python = Join-Path $venv "Scripts/python.exe"
+          $wheel = Get-ChildItem "dist/*.whl" | Select-Object -First 1
+          & $python -m pip install $wheel.FullName pytest
+
+      - name: Run installed-package tests
+        shell: pwsh
+        working-directory: ${{ runner.temp }}
+        env:
+          MPLCONFIGDIR: ${{ runner.temp }}/matplotlib
+        run: |
+          $python = Join-Path $env:RUNNER_TEMP "spicedmodel-test-venv/Scripts/python.exe"
+          & $python -m pytest "$env:GITHUB_WORKSPACE/tests"
+
+      - name: Upload wheel
+        if: inputs.upload_artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: wheel-windows-${{ matrix.arch }}
+          path: dist/*.whl
+          if-no-files-found: error
+
+      - name: Upload source distribution
+        if: inputs.upload_artifacts && matrix.primary && !inputs.linux_x86_64 && !inputs.linux_aarch64 && !inputs.macos_arm64 && !inputs.macos_x86_64
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: source-distribution
+          path: dist/*.tar.gz
+          if-no-files-found: error
