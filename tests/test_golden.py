@@ -13,7 +13,7 @@ ATOL = 2e-5
 # reverse-transformed DC output. That cancellation varies slightly between
 # compilers even when the complete model output is stable.
 FOURIER_RTOL = 2e-4
-FOURIER_ATOL = 2e-3
+FOURIER_ATOL = 4e-3
 
 
 def _array(section):

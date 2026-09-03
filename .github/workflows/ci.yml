@@ -140,15 +140,17 @@ jobs:
       matrix:
         include: ${{ fromJSON(
           github.event_name == 'pull_request' &&
-          '[{"arch":"arm64","runner":"macos-latest","python_arch":"arm64","primary":true}]' ||
+          '[{"arch":"arm64","runner":"macos-latest","python_arch":"arm64","deployment_target":"11.0","wheel_platform":"macosx_11_0_arm64","primary":true}]' ||
           inputs.macos_arm64 && inputs.macos_x86_64 &&
-          '[{"arch":"arm64","runner":"macos-latest","python_arch":"arm64","primary":true},{"arch":"x86_64","runner":"macos-15-intel","python_arch":"x64","primary":false}]' ||
+          '[{"arch":"arm64","runner":"macos-latest","python_arch":"arm64","deployment_target":"11.0","wheel_platform":"macosx_11_0_arm64","primary":true},{"arch":"x86_64","runner":"macos-15-intel","python_arch":"x64","deployment_target":"10.15","wheel_platform":"macosx_10_15_x86_64","primary":false}]' ||
           inputs.macos_arm64 &&
-          '[{"arch":"arm64","runner":"macos-latest","python_arch":"arm64","primary":true}]' ||
-          '[{"arch":"x86_64","runner":"macos-15-intel","python_arch":"x64","primary":true}]'
+          '[{"arch":"arm64","runner":"macos-latest","python_arch":"arm64","deployment_target":"11.0","wheel_platform":"macosx_11_0_arm64","primary":true}]' ||
+          '[{"arch":"x86_64","runner":"macos-15-intel","python_arch":"x64","deployment_target":"10.15","wheel_platform":"macosx_10_15_x86_64","primary":true}]'
           ) }}
     name: macos-${{ matrix.arch }}
     runs-on: ${{ matrix.runner }}
+    env:
+      MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
 
     steps:
       - name: Check out repository
@@ -171,6 +173,9 @@ jobs:
         run: |
           python -m pip install build
           python -m build --wheel .
+
+      - name: Verify wheel deployment target
+        run: test -f dist/spicedmodel-*-${{ matrix.wheel_platform }}.whl
 
       - name: Build source distribution
         if: inputs.upload_artifacts && matrix.primary && !inputs.linux_x86_64 && !inputs.linux_aarch64
